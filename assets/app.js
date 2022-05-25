@@ -99,12 +99,6 @@ const App = () => {
               />
 
 
-              <PrivateRoute
-                path="/tim2"
-                isAuthenticated={isAuthenticated}
-                component={Profile}
-              />
-
               {activityReportComponent}
 
               {timeManagementComponent}
