@@ -1,7 +1,5 @@
 import React from "react";
-import SideBar from "../components/Sidebar";
 import AuthAPI from "../services/authAPI";
-import NavBar from "../components/Navbar";
 import curved from "../../images/curved-images/curved.jpg"
 import { Link } from "react-router-dom";
 // reactstrap components

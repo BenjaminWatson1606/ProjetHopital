@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import ReactDOM from "react-dom";
-import NavBar from "./js/components/Navbar";
 import { HashRouter, Switch, Route, Redirect } from "react-router-dom";
 import RoleBasedRouting from "./js/components/authorization/RoleBasedRouting";
 import HomePage from "./js/pages/HomePage";
@@ -8,7 +7,6 @@ import Login from "./js/pages/Login";
 import AuthAPI from "./js/services/authAPI";
 import Rh from "./js/pages/Rh";
 import Popup from "react-popup";
-import SideBar from "./js/components/Sidebar";
 import "./i18nextConf";
 
 /*
@@ -66,17 +64,8 @@ const App = () => {
       <HashRouter>
         <Popup />
         <div className="row">
-          {AuthAPI.isAuthenticated() && (
-            <div className="col-1 container p-0">
-              <SideBar />
-            </div>
-          )}
 
           <div className="col container-fluid p-0">
-            <NavBar
-              isAuthenticated={isAuthenticated}
-              setIsAuthenticated={setIsAuthenticated}
-            />
             <LanguageSelect />
 
             <Switch>

@@ -1,18 +1,50 @@
-{% extends 'base.html.twig' %}
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Welcome!{% endblock %}</title>
+    {# Run `composer require symfony/webpack-encore-bundle`
+           and uncomment the following Encore helpers to start using Symfony UX #}
+    {% block stylesheets %}
+        {#{{ encore_entry_link_tags('app') }}#}
+    {% endblock %}
 
-{% block title %}
-  Gestion Hospitalière
-{% endblock %}
-
-{% block stylesheets %}
-
-  {{ encore_entry_link_tags('app') }}
-{% endblock %}
-
+    {% block javascripts %}
+        {#{{ encore_entry_script_tags('app') }}#}
+    {% endblock %}
+</head>
+<body>
 {% block body %}
-  <div id="app"></div>
+    <html lang="en">
 
-  {% block javascripts %}
-    {{ encore_entry_script_tags('app') }}
-  {% endblock %}
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title> TP Javascript</title>
+        <link rel="stylesheet" href="{{asset('CSS/style.css')}}">
+    </head>
+
+    <body id="body-pd">
+    <header class="header" id="header">
+        <div class="header_toggle"> <i class='bx bx-menu' id="header-toggle"></i> </div>
+        <div class="header_img">  </div>
+    </header>
+    <div class="l-navbar" id="nav-bar">
+        <nav class="nav">
+            <div> <i class='bx bx-layer nav_logo-icon'></i> <span
+                            class="nav_logo-name nav_logo" >Accueil</span> </a>
+        
+              
+    <!--Container Main start-->
+
+    <!--Container Main end-->
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script type="text/Javascript" src="{{asset('JS/index.js')}}"></script>
+    </body>
+
+    </html>
+
 {% endblock %}
+</body>
+</html>
