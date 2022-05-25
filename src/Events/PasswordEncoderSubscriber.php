@@ -2,7 +2,7 @@
 
 namespace App\Events;
 
-use App\Entity\User;
+use App\Entity\Compte;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\HttpKernel\Event\ViewEvent;
 use ApiPlatform\Core\EventListener\EventPriorities;
@@ -36,7 +36,7 @@ class PasswordEncoderSubscriber implements EventSubscriberInterface
         $object = $event->getControllerResult();
         $method = $event->getRequest()->getMethod();
 
-        if($object instanceof User && $method === "POST")
+        if($object instanceof Compte && $method === "POST")
         {
             $hash = $this->encoder->encodePassword($object, $object->getPassword());
             $object->setPassword($hash);

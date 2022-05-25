@@ -1,13 +1,13 @@
 security:
   encoders:
-    App\Entity\User:
+    App\Entity\Compte:
       algorithm: auto
   # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
   providers:
     # used to reload user from session & other features (e.g. switch_user)
     app_user_provider:
       entity:
-        class: App\Entity\User
+        class: App\Entity\Compte
         property: username
   firewalls:
     dev:
@@ -51,7 +51,7 @@ security:
     - { path: ^/api/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
     - { path: ^/api/profils, roles: IS_AUTHENTICATED_FULLY }
     - {
-        path: ^/api/users,
+        path: ^/api/comptes,
         roles: IS_AUTHENTICATED_FULLY,
         method: [GET, PUT, DELETE],
       }
