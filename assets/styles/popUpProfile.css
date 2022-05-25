@@ -1,0 +1,96 @@
+.popup-name{
+    text-align: center;
+}
+
+.nav{
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.nav .current{
+    border-bottom: 3px solid #0B7FC7;
+}
+
+.nav li{
+    display: inline-block;
+    padding: 0 0.75rem;
+    text-decoration: none;
+}
+
+#divskill, #divcontact, #divstate{
+    display: none;
+}
+
+.formations, .experiences{
+    display:flex;
+}
+
+.formations p, .experiences p{
+    width: 40%;
+}
+
+.formation, .experience{
+    width: 50%;
+}
+
+.formation p, .experience p{
+    width: 100%;
+}
+
+.experiences{
+    margin-bottom: 50px;
+}
+
+.formation-item, .experience-item{
+    border-bottom: 3px solid black;
+    margin-bottom: 10px;
+}
+
+#divcv .formation-item .ligne, #divcv .experience-item .ligne,
+#divcontact .ligne{
+    margin-bottom: 10px;
+}
+
+#divskill .skill{
+    display: flex;
+    height: 30px;
+    margin-bottom: 50px;
+
+}
+
+#divskill .skill p{
+    width: 50%;
+}
+
+#divskill .skill .stars{
+    display: flex;
+}
+
+#divstate #interview{
+    display: flex;
+}
+
+#divstate  #interview #interviewicon{
+    display: flex;
+    flex-direction: column;
+ }
+
+#divstate #interviewIcon{
+    margin-bottom: 20px;
+    width: 60px;
+    margin-right: 20px;
+}
+
+#divstate .enabled{
+    background-color: #3aaf85;
+}
+
+.nodisplayed{
+    display: none;
+}
+
+.TakeContact, .interviewList{
+    margin-bottom: 40px;
+}
+

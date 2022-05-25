@@ -1,0 +1,73 @@
+#listProfile{
+    display: flex;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+}
+
+.card{
+    width: 20rem;
+
+    height: 200px;
+    margin-left: 20px;
+    padding-bottom: 10px;
+    text-align: center;
+}
+
+
+.recruitmentprogress{
+    position: relative;
+}
+
+.progressbar{
+    padding-top: 26px;
+    position: absolute;
+}
+
+#listIcon{
+    position: absolute;
+    display: flex;
+    text-align: center;
+    margin-top: 10px;
+}
+
+#contactIcon, #interviewIcon, #contractIcon{
+    width: 40%;
+}
+
+.enabled{
+    background-color: #3aaf85;
+}
+
+.inProgress{
+    background-color: orange;
+}
+
+.blockedImage{
+    background-color: red;
+}
+
+.addButtonPopup{
+    width: 2%;
+    margin-left: 20px;
+    margin-bottom: 20px;
+}
+
+.divAddCandidate{
+    text-align: center;
+    justify-content: center;
+}
+
+.add{
+    display: flex;
+    margin-top: 50px;
+
+}
+
+.addCandidateIcon{
+    width: 20%;
+}
+
+.vertical {
+    border-left: 4px solid black;
+    display: inline-block;
+}
