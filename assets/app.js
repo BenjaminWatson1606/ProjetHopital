@@ -42,17 +42,18 @@ const PrivateRoute = ({ path, isAuthenticated, component }) =>
 
 let timeManagementComponent = <></>
 let activityReportComponent = <></>
+if (roles) {
+  if (roles.find(role => role == "ROLE_MANAGER")) {
+    timeManagementComponent = <RoleBasedRouting exact path="/timeManagement" component={ManagerTimeManagement} roles={'ROLE_MANAGER'} />
+  } else if (roles.find(role => role == "ROLE_COLLABORATOR")) {
+    timeManagementComponent = <RoleBasedRouting exact path="/timeManagement" component={CollaboratorTimeManagement} roles={'ROLE_COLLABORATOR'} />
+  }
 
-if (roles.find(role => role == "ROLE_MANAGER")) {
-  timeManagementComponent = <RoleBasedRouting exact path="/timeManagement" component={ManagerTimeManagement} roles={'ROLE_MANAGER'} />
-} else if (roles.find(role => role == "ROLE_COLLABORATOR")) {
-  timeManagementComponent = <RoleBasedRouting exact path="/timeManagement" component={CollaboratorTimeManagement} roles={'ROLE_COLLABORATOR'} />
-}
-
-if (roles.find(role => role == "ROLE_MANAGER")) {
-  activityReportComponent = <RoleBasedRouting exact path="/activityReport" component={ManagerActivityReport} roles={'ROLE_MANAGER'} />
-} else if (roles.find(role => role == "ROLE_COLLABORATOR")) {
-  activityReportComponent = <RoleBasedRouting exact path="/activityReport" component={CollaboratorActivityReport} roles={'ROLE_COLLABORATOR'} />
+  if (roles.find(role => role == "ROLE_MANAGER")) {
+    activityReportComponent = <RoleBasedRouting exact path="/activityReport" component={ManagerActivityReport} roles={'ROLE_MANAGER'} />
+  } else if (roles.find(role => role == "ROLE_COLLABORATOR")) {
+    activityReportComponent = <RoleBasedRouting exact path="/activityReport" component={CollaboratorActivityReport} roles={'ROLE_COLLABORATOR'} />
+  }
 }
 
 const App = () => {

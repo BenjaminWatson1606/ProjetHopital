@@ -49,7 +49,29 @@ const NavBar = ({ isAuthenticated, setIsAuthenticated }) => {
                           <a href="." className="nav_link"> <i className='bx bx-user nav_icon'></i> <span className="nav_name">Comptes</span></a>
                       </div>
                     
-                  </div> <a href="http://localhost:8000/logout" className="nav_link"> <i className='bx bx-log-out nav_icon'></i> <span className="nav_name">Se déconnecter</span> </a>
+                  </div> 
+                  {!isAuthenticated &&
+                  <NavLink 
+                    className="nav_link bx bx-log-out nav_icon nav_name"
+                    to="/login">
+                    Log in
+                  </NavLink>
+                  }
+                  {!isAuthenticated &&
+                  <NavLink 
+                    className="nav_link bx bx-log-out nav_icon nav_name"
+                    to="/register">
+                    Register
+                  </NavLink>
+                  }
+                  {isAuthenticated &&
+                  <NavLink 
+                    className="nav_link bx bx-log-out nav_icon nav_name"
+                    onClick={handleLogout}
+                    to="/login">
+                    Log out
+                  </NavLink>
+                  }
               </nav>
           </div>
 
