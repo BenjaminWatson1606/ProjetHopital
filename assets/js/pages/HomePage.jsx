@@ -1,7 +1,7 @@
 import React from "react";
 import AuthAPI from "../services/authAPI";
-import curved from "../../images/curved-images/curved.jpg"
 import { Link } from "react-router-dom";
+import NavBar from "../components/Navbar";
 // reactstrap components
 import {
   Badge,
@@ -17,7 +17,6 @@ import {
 function Index() {
   return (
     <>
-
       <div className="main-content">
         <section className="py-6 pb-9 bg-default">
           <Container fluid>

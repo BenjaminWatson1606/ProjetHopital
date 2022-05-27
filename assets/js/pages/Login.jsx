@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useEffect } from 'react';
 import AuthAPI from "../services/authAPI";
 import { useTranslation } from "react-i18next";
-import curved from "../../images/curved-images/curved6.jpg"
+
 
 
 

@@ -58,7 +58,7 @@ export default function Register() {
 
     if (error === false) {
       try {
-        await axios.post("http://localhost:8000/api/users", {
+        await axios.post("http://localhost:8000/api/comptes", {
           username: user.Username,
           email: user.Email,
           password: user.Password

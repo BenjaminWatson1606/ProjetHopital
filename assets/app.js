@@ -7,6 +7,7 @@ import Login from "./js/pages/Login";
 import AuthAPI from "./js/services/authAPI";
 import Rh from "./js/pages/Rh";
 import Popup from "react-popup";
+import NavBar from "./js/components/Navbar";
 import "./i18nextConf";
 
 /*
@@ -18,7 +19,6 @@ import "./i18nextConf";
 
 // any CSS you import will output into a single css file (app.css in this case)
 import "./styles/app.css";
-import LanguageSelect from "./languageSelect";
 import { toast, ToastContainer } from "react-toastify";
 import jwtDecode from "jwt-decode";
 import 'react-toastify/dist/ReactToastify.css';
@@ -66,7 +66,10 @@ const App = () => {
         <div className="row">
 
           <div className="col container-fluid p-0">
-            <LanguageSelect />
+            <NavBar
+              isAuthenticated={isAuthenticated}
+              setIsAuthenticated={setIsAuthenticated}
+            />
 
             <Switch>
               <Route
