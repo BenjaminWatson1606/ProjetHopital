@@ -24,7 +24,7 @@ class Patient
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
-     * @Groups({"patient_read"})
+     * @Groups({"patient_read", "lit_read"})
      */
     private $id;
 

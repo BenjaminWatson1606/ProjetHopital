@@ -24,6 +24,10 @@ import jwtDecode from "jwt-decode";
 import 'react-toastify/dist/ReactToastify.css';
 import Register from "./js/pages/Register";
 import Patient from "./js/pages/Patient";
+import Lit from "./js/pages/Lit";
+import Chambre from "./js/pages/Chambre";
+import Service from "./js/pages/Service";
+import Compte from "./js/pages/Compte";
 import ManagerTimeManagement from "./js/pages/crew/ManagerTimeManagement";
 import CollaboratorTimeManagement from "./js/pages/crew/CollaboratorTimeManagement";
 import ManagerActivityReport from "./js/pages/crew/ManagerActivityReport";
@@ -94,6 +98,31 @@ const App = () => {
                 isAuthenticated={isAuthenticated}
                 component={Patient}
               />
+
+              <PrivateRoute
+                path="/lit"
+                isAuthenticated={isAuthenticated}
+                component={Lit}
+              />
+
+              <PrivateRoute
+                path="/chambre"
+                isAuthenticated={isAuthenticated}
+                component={Chambre}
+              />
+
+              <PrivateRoute
+                path="/service"
+                isAuthenticated={isAuthenticated}
+                component={Service}
+              />
+
+              <PrivateRoute
+                path="/compte"
+                isAuthenticated={isAuthenticated}
+                component={Compte}
+              />
+
 
               <Route
                 path="/register"

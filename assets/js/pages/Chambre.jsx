@@ -16,21 +16,21 @@ import {
     Col
   } from "reactstrap";
 
-  const Patient = (props) => {
+  const Chambre = (props) => {
     
     const { t } = useTranslation();
-    const [patients, setPatients] = useState([]);
+    const [chambres, setChambres] = useState([]);
 
     useEffect(() => {
-      fetchPatients()
+      fetchChambres()
     }, [])
 
-    const fetchPatients = async () => {
+    const fetchChambres = async () => {
   
       try {
         await axios
-          .get("http://localhost:8000/api/patients")
-          .then((response) => setPatients(response.data["hydra:member"]))
+          .get("http://localhost:8000/api/chambres")
+          .then((response) => setChambres(response.data["hydra:member"]))
       } catch (error) {
         if (error.response) {
           // Request made and server responded
@@ -61,30 +61,20 @@ import {
   
     return (
         <>
-          <div className="patientsArray">
-            <table id="patientsTable" className="table table-dark">
+          <div className="chambresArray">
+            <table id="chambresTable" className="table table-dark">
 
               <thead>
                   <tr>
-                    <th>Nom</th>
-                    <th>Prenom</th>
-                    <th>Date d'arrivée</th>
-                    <th>Date de départ</th>
-                    <th>Âge</th>
-                    <th>Adresse</th>
-                    <th>Type</th>
+                    <th>Numero</th>
+                    <th>Service</th>
                   </tr>
               </thead>
               <tbody>
-                {patients.map(patient => (
+                {chambres.map(chambre => (
                   <tr>
-                    <td>{patient.NomPatient}</td>
-                    <td>{patient.PrenomPatient}</td>
-                    <td>{toIsoString(patient.DateDepart)}</td>
-                    <td>{toIsoString(patient.DateArrivee)}</td>
-                    <td>{patient.AgePatient}</td>
-                    <td>{patient.AdressePatient}</td>
-                    <td>{patient.TypePatient}</td>
+                    <td>{chambre.id}</td>
+                    <td>{chambre.Service.NomService}</td>
                   </tr>))}
               </tbody>
 
@@ -95,4 +85,4 @@ import {
 
   }
 
-export default Patient;
+export default Chambre;

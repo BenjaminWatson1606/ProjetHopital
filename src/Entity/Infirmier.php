@@ -45,6 +45,11 @@ class Infirmier
      */
     private $Compte;
 
+    /**
+     * @ORM\OneToOne(targetEntity=Service::class, inversedBy="Infirmier")
+     */
+    private $Service;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -82,6 +87,18 @@ class Infirmier
     public function setCompte(Compte $Compte): self
     {
         $this->Compte = $Compte;
+
+        return $this;
+    }
+
+    public function getService(): ?Service
+    {
+        return $this->Service;
+    }
+
+    public function setService(Service $Service): self
+    {
+        $this->Service = $Service;
 
         return $this;
     }

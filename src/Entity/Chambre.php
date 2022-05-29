@@ -5,6 +5,7 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\ChambreRepository;
 use ApiPlatform\Core\Annotation\ApiFilter;
+use Doctrine\Common\Collections\Collection;
 use ApiPlatform\Core\Annotation\ApiResource;
 use Symfony\Component\Serializer\Annotation\Groups;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
@@ -17,13 +18,14 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
  *  "groups"={"chambre_read"}
  * })
  */
+#[ApiFilter(SearchFilter::class, properties: ['Service.id' => 'exact'])]
 class Chambre
 {
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
-     * @Groups({"chambre_read"})
+     * @Groups({"chambre_read", "lit_read"})
      */
     private $id;
     
@@ -56,14 +58,17 @@ class Chambre
         return $this;
     }
 
-    public function getLits(): ?Lit
+    public function getLits(): ?Collection
     {
         return $this->Lits;
     }
 
-    public function setLits(Lit $Lits): self
+    public function setLits(Lit $Lit): self
     {
-        $this->Lits = $Lits;
+        if (!$this->Lits->contains($Lit)) {
+            $this->Lits[] = $Lit;
+            $Lit->setUtilisateur($this);
+        }
 
         return $this;
     }

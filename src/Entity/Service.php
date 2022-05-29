@@ -5,6 +5,7 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\ServiceRepository;
 use ApiPlatform\Core\Annotation\ApiFilter;
+use Doctrine\Common\Collections\Collection;
 use ApiPlatform\Core\Annotation\ApiResource;
 use Symfony\Component\Serializer\Annotation\Groups;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
@@ -23,13 +24,13 @@ class Service
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
-     * @Groups({"service_read"})
+     * @Groups({"service_read", "chambre_read"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string")
-     * @Groups({"service_read"})
+     * @Groups({"service_read", "chambre_read"})
      */
     private $NomService;
 
@@ -79,7 +80,7 @@ class Service
     }
 
 
-    public function getChambres(): ?Chambre
+    public function getChambres(): ?Collection
     {
         return $this->Chambres;
     }

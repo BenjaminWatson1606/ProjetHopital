@@ -17,6 +17,9 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
  *  "groups"={"lit_read"}
  * })
  */
+
+#[ApiFilter(SearchFilter::class, properties: ['Chambre.Service.id' => 'exact', 'Disponibilite'])]
+
 class Lit
 {
     /**
@@ -35,11 +38,13 @@ class Lit
 
     /**
      * @ORM\ManyToOne(targetEntity=Chambre::class, inversedBy="Lits")
+     * @Groups({"lit_read"})
      */
     private $Chambre;
 
     /**
      * @ORM\OneToOne(targetEntity=Patient::class, inversedBy="Lit")
+     * @Groups({"lit_read"})
      */
     private $Patient;
 
