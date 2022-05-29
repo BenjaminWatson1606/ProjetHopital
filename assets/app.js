@@ -72,8 +72,10 @@ const App = () => {
               isAuthenticated={isAuthenticated}
               setIsAuthenticated={setIsAuthenticated}
             />
+            
 
             <Switch>
+            
               <Route
                 path="/login"
                 render={(props) => (
@@ -97,11 +99,6 @@ const App = () => {
                 path="/register"
                 component={Register}
               />
-
-
-              {activityReportComponent}
-
-              {timeManagementComponent}
 
               <Route
                 path="/"

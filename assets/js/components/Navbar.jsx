@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { NavLink } from "react-router-dom";
 import AuthAPI from "../services/authAPI";
+import logo from "../../images/hospital_logo.jpg";
 
 
 const NavBar = ({ isAuthenticated, setIsAuthenticated }) => {
@@ -35,11 +36,16 @@ const NavBar = ({ isAuthenticated, setIsAuthenticated }) => {
       <div id="body-pd">
           <header className="header" id="header">
               <div className="header_toggle"> <i className='bx bx-menu' id="header-toggle"></i> </div>
+              <div className="header_img"> <img src={logo} className='header_img' alt="logo"></img> </div>
           </header>
           <div className="l-navbar" id="nav-bar">
               <nav className="nav">
                   <div> 
-                    <a href="." className="nav_logo"> <i className='bx bx-layer nav_logo-icon'></i> <span className="nav_logo-name">Accueil</span> </a>
+                    <NavLink 
+                    className="nav_logo bx bx-layer nav_logo-icon nav_logo-name"
+                    to="/#">
+                    Accueil
+                  </NavLink>
 
                       <div className="nav_list"> 
                           <a href="." className="nav_link active"> <i className='bx bx-grid-alt nav_icon'></i> <span className="nav_name">Patient</span> </a> 
@@ -78,7 +84,7 @@ const NavBar = ({ isAuthenticated, setIsAuthenticated }) => {
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script type="text/Javascript" src="{{asset('JS/index.js')}}"></script>
     </div>
-    );
-};
+  );
+};  
 
 export default NavBar;

@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 import useState from "react-usestateref";
 import Field from "../components/forms/Field";
 import axios from "axios";
+import hospital from "../../images/hospital.jpg";
 
 export default function Register() {
   const specialChars = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/;
@@ -71,62 +72,55 @@ export default function Register() {
   };
 
   return (
-    <div style={{ marginLeft: "40%"}} className="g-sidenav-show  bg-gray-100 montserrat body1">
-      <section className="min-vh-100 mb-8" >
-
-        <div className="page-header align-items-start min-vh-50 pt-5 pb-11 m-3 border-radius-lg">
-          <div className="container">
-
-            <div className="row justify-content-center">
-              <div className="col-lg-5 text-center mx-auto">
-
-                <h1 className=" mb-2 mt-5">{t("register")}</h1>
-              </div>
-            </div>
-          </div>
-        </div>
-
-
-        <div className="container">
-          <div className="row mt-lg-n10 mt-md-n11 mt-n10">
-            <div className="col-xl-4 col-lg-5 col-md-7 mx-auto">
-              <div className="card z-index-0">
-                <div className="card-body montserrat">
-                  <form role="form text-left" onSubmit={handleSubmit}>
-                    <Field
-                      label={t("username")}
-                      name="Username"
-                      placeholder={t("username")}
-                      value={user.Username}
-                      onChange={handleChange}
-                    />
-                    <Field
-                      label={t("password")}
-                      name="Password"
-                      type="password"
-                      placeholder={t("password")}
-                      value={user.Password}
-                      minlength="3"
-                      maxlength="20"
-                      onChange={handleChange}
-                    />
-                    <div className="form-check form-check-info text-left">
-                      <input name="IsConditionsChecked" className="form-check-input" type="checkbox" onChange={handleCheckboxChange} id="flexCheckDefault" />
-                      <label className="form-check-label montserrat" for="flexCheckDefault">
-                        {t("agree")} <a href="/#/CGU" className="text-dark font-weight-bolder montserrat"> {t("conditions")} </a>
-                      </label>
+    <section className="bg-gray-200" >
+      <div className="main-content  mt-0"></div>
+        <div className="page-header align-items-start min-vh-100 FlexContainer"> <img src={hospital} className='page-header align-items-start min-vh-100 FlexContainer Overlay' alt="hospital"></img>
+          <span className="mask bg-gradient-dark opacity-6"></span>
+            <div className="container my-auto">
+              <div className="row">
+                <div className="col-lg-4 col-md-8 col-12 mx-auto">
+                 <div className="card z-index-0 fadeIn3 fadeInBottom">
+                  <div className="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+                    <div className="bg-gradient-primary shadow-primary border-radius-lg py-3 pe-1">
+                      <h4 className="text-white font-weight-bolder text-center mt-2 mb-0">Créer Compte</h4>
                     </div>
-                    <div className="text-center">
-                      <button type="submit" className="btn1 bg-gradient-info w-100 my-4 mb-2 montserrat">{t("register")}</button>
-                    </div>
-                    <p className="text-sm mt-3 mb-0 montserrat">{t("haveAccount")} <a href="#/login" className="text-dark font-weight-bolder">{t("logIn")}</a></p>
-                  </form>
+                  </div>
+                      <div className="card-body">
+                        <form role="form text-left" onSubmit={handleSubmit}>
+                          <Field
+                            label={t("username")}
+                            name="Username"
+                            placeholder={t("username")}
+                            value={user.Username}
+                            onChange={handleChange}
+                          />
+                          <Field
+                            label={t("password")}
+                            name="Password"
+                            type="password"
+                            placeholder={t("password")}
+                            value={user.Password}
+                            minlength="3"
+                            maxlength="20"
+                            onChange={handleChange}
+                          />
+                            <div className="form-check form-check-info text-left">
+                              <input name="IsConditionsChecked" className="form-check-input" type="checkbox" onChange={handleCheckboxChange} id="flexCheckDefault" />
+                              <label className="form-check-label montserrat" for="flexCheckDefault">
+                                {t("agree")} <a href="/#/CGU" className="text-dark font-weight-bolder montserrat"> {t("conditions")} </a>
+                              </label>
+                            </div>
+                            <div className="text-center">
+                              <button type="submit" className="btn bg-gradient-primary w-100 my-4 mb-2">{t("Register")}</button>
+                            </div>
+                            <p className="text-sm mt-3 mb-0 montserrat">{t("haveAccount")} <a href="#/login" className="text-dark font-weight-bolder">{t("logIn")}</a></p>
+                          </form>
                 </div>
               </div>
             </div>
+            </div>
           </div>
         </div>
-      </section>
-    </div>
+        </section>
   )
 }

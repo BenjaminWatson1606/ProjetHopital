@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useEffect } from 'react';
 import AuthAPI from "../services/authAPI";
 import { useTranslation } from "react-i18next";
+import hospital from "../../images/hospital.jpg";
 
 
 
@@ -41,82 +42,51 @@ const login = ({ onLogin, history }) => {
 
 
   return (
-    <div className="bg-white montserrat">
-      <main className="main-content  mt-0 montserrat">
-        <section>
-          <div className="page-header min-vh-75 montserrat">
-            <div className="container montserrat">
-              <div className="row montserrat">
-                <div className="col-xl-4  d-flex montserrat">
-                  <div className="card card-plain mt-8 montserrat">
-                    <div className="card-header pb-0 bg-transparent montserrat">
-                      <h3 className="text-gradient montserrat">Welcome back</h3>
-                      <p className="mb-0 montserrat">Enter your username and password to sign in</p>
-                    </div>
-                    <div className="card-body montserrat">
-                      <form role="form" onSubmit={handleSubmit}>
-                        <label htmlFor="username" className="form-label mt-4 montserrat">
-                          {t("username")}
-                        </label>
-                        <input
-                          value={credentials.username}
-                          onChange={handleChange}
-                          type="text"
-                          className={"form-control montserrat" + (error && " is-invalid")}
-                          id="username"
-                          name="username"
-                          placeholder="Enter username"
-                        />
-                        {error && <p className="invalid-feedback">{error}</p>}{" "}
-                        <div className="form-group">
-                          <label htmlFor="password" className="form-label mt-4 montserrat">
-                            {t("password")}
-                          </label>
-                          <input
-                            value={credentials.password}
-                            onChange={handleChange}
-                            type="password"
-                            className="form-control montserrat"
-                            id="password"
-                            name="password"
-                            placeholder="Password"
-                          />
-                        </div>
+      <div className="bg-gray-200">
+        <div className="main-content  mt-0">
+            <div className="page-header align-items-start min-vh-100 FlexContainer"> <img src={hospital} className='page-header align-items-start min-vh-100 FlexContainer Overlay' alt="hospital"></img>
+                <span className="mask bg-gradient-dark opacity-6"></span>
+                <div className="container my-auto">
+                    <div className="row">
+                        <div className="col-lg-4 col-md-8 col-12 mx-auto">
+                            <div className="card z-index-0 fadeIn3 fadeInBottom">
+                                <div className="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+                                    <div className="bg-gradient-primary shadow-primary border-radius-lg py-3 pe-1">
+                                        <h4 className="text-white font-weight-bolder text-center mt-2 mb-0">Connexion</h4>
+                                    </div>
+                                </div>
+                                <div className="card-body">
+                                    <form method="post">
 
-                        <div className="form-check form-switch montserrat">
-                          <input className="form-check-input" id=" customCheckLogin" type="checkbox" />
-                          <label className="form-check-label" htmlFor=" customCheckLogin">
-                            <span className="text-muted">Remember me</span>
-                          </label>
+                                        <label for="inputUsername">Nom d'utilisateur</label>
+                                        <input type="text" name="username" id="inputUsername" className="form-control" autocomplete="username" required autofocus></input>
+                                        <label for="inputPassword">Mot de passe</label>
+                                        <input type="password" name="password" id="inputPassword" className="form-control" autocomplete="current-password" required></input>
+
+                                        <input type="hidden" name="_csrf_token"
+                                              value="{{ csrf_token('authenticate') }}"
+                                        ></input>
+
+
+                                        <button className="btn bg-gradient-primary w-100 my-4 mb-2" type="submit">
+                                            Connexion
+                                        </button>
+                                    </form>
+
+                                    <a href="#/register"><button className="btn bg-gradient-primary w-100 my-4 mb-2" type="button">
+                                        Inscription
+                                    </button></a>
+
+                                </div>
+                            </div>
                         </div>
-                        <div className="text-center">
-                          <button type="submit" className="btn1 bg-gradient-info w-100 mt-4 mb-0 btn-warning montserrat"> {t("submit")}</button>
-                        </div>
-                      </form>
                     </div>
-                    <div className="card-footer text-center pt-0 px-lg-2 px-1 montserrat">
-                      <p className="mb-4  mx-auto montserrat">
-                        Don't have an account?
-                        <a className=" text-gradient font-weight-bold montserrat" href="#/register">Sign up</a>
-                      </p>
-                    </div>
-                  </div>
                 </div>
-                <div className="col-md-6">
-                  <div className="oblique position-absolute top-0 h-100 d-md-block d-none ">
-                    <div className="oblique-image bg-cover position-absolute fixed-top  h-100  ms-n6"> </div>
-                  </div>
-                </div>
-              </div>
             </div>
-          </div>
-        </section>
-      </main>
-
-
-    </div>
-  )
-};
+      </div>
+      </div>
+  );
+};    
 
 export default login;
 
