@@ -47,12 +47,12 @@ class Compte implements UserInterface
     private $roles = [];
 
     /**
-     * @ORM\OneToOne(targetEntity=Infirmier::class, inversedBy="comptes")
+     * @ORM\OneToOne(targetEntity=Infirmier::class, inversedBy="Compte")
      */
     private $Infirmier;
 
     /**
-     * @ORM\OneToOne(targetEntity=Secretaire::class, inversedBy="comptes")
+     * @ORM\OneToOne(targetEntity=Secretaire::class, inversedBy="Compte")
      */
     private $Secretaire;
 

@@ -23,6 +23,7 @@ import { toast, ToastContainer } from "react-toastify";
 import jwtDecode from "jwt-decode";
 import 'react-toastify/dist/ReactToastify.css';
 import Register from "./js/pages/Register";
+import Patient from "./js/pages/Patient";
 import ManagerTimeManagement from "./js/pages/crew/ManagerTimeManagement";
 import CollaboratorTimeManagement from "./js/pages/crew/CollaboratorTimeManagement";
 import ManagerActivityReport from "./js/pages/crew/ManagerActivityReport";
@@ -84,6 +85,12 @@ const App = () => {
                 path="/rh"
                 isAuthenticated={isAuthenticated}
                 component={Rh}
+              />
+
+              <PrivateRoute
+                path="/patient"
+                isAuthenticated={isAuthenticated}
+                component={Patient}
               />
 
               <Route

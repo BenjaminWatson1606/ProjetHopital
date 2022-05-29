@@ -71,19 +71,18 @@ class Patient
     private $AdressePatient;
 
     /**
-     * @ORM\Column(type="boolean")
+     * @ORM\Column(type="string")
      * @Groups({"patient_read"})
      */
     private $TypePatient;
 
     /**
-     * @ORM\OneToOne(targetEntity=Lit::class, inversedBy="patients")
+     * @ORM\OneToOne(targetEntity=Lit::class, mappedBy="Patient")
      */
     private $Lit;
 
     /**
-     * @ORM\OneToOne(targetEntity=Vaccination::class, inversedBy="patients")
-     * @Groups({"patient_read"})
+     * @ORM\OneToOne(targetEntity=Vaccination::class, mappedBy="Patient")
      */
     private $Vaccination;
 

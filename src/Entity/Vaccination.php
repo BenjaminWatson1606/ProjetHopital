@@ -40,24 +40,24 @@ class Vaccination
     private $DateFin;
 
     /**
-     * @ORM\OneToOne(targetEntity=Vaccin::class, inversedBy="vaccinations")
+     * @ORM\OneToOne(targetEntity=Vaccin::class, inversedBy="Vaccination")
      */
     private $Vaccin;
 
     /**
-     * @ORM\OneToOne(targetEntity=Secretaire::class, inversedBy="vaccinations")
+     * @ORM\OneToOne(targetEntity=Secretaire::class, inversedBy="Vaccination")
      */
     private $Secretaire;
 
     /**
-     * @ORM\OneToOne(targetEntity=Medecin::class, inversedBy="vaccinations")
+     * @ORM\OneToOne(targetEntity=Medecin::class, inversedBy="Vaccination")
      */
     private $Medecin;
 
     /**
-     * @ORM\OneToOne(targetEntity=Patient::class, inversedBy="vaccinations")
+     * @ORM\OneToOne(targetEntity=Patient::class, inversedBy="Vaccination")
      */
-    private $Patients;
+    private $Patient;
 
     public function getId(): ?int
     {

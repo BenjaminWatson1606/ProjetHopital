@@ -41,7 +41,7 @@ class Infirmier
     private $PrenomInfirmier;
 
     /**
-     * @ORM\OneToOne(targetEntity=Compte::class, inversedBy="infirmiers")
+     * @ORM\OneToOne(targetEntity=Compte::class, mappedBy="Infirmier")
      */
     private $Compte;
 

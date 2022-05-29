@@ -40,13 +40,13 @@ class Secretaire
     private $PrenomSecretaire;
 
     /**
-     * @ORM\OneToOne(targetEntity=Vaccination::class, inversedBy="Secretaires")
+     * @ORM\OneToOne(targetEntity=Vaccination::class, mappedBy="Secretaire")
      * @Groups({"secretaire_read"})
      */
     private $Vaccination;
 
     /**
-     * @ORM\OneToOne(targetEntity=Compte::class, inversedBy="Secretaires")
+     * @ORM\OneToOne(targetEntity=Compte::class, mappedBy="Secretaire")
      */
     private $Compte;
 

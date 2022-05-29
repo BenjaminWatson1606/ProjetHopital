@@ -40,13 +40,13 @@ class Medecin
     private $PrenomMedecin;
 
     /**
-     * @ORM\OneToOne(targetEntity=Vaccination::class, inversedBy="medecins")
+     * @ORM\OneToOne(targetEntity=Vaccination::class, mappedBy="Medecin")
      * @Groups({"medecin_read"})
      */
     private $Vaccination;
 
     /**
-     * @ORM\OneToOne(targetEntity=Compte::class, inversedBy="medecins")
+     * @ORM\OneToOne(targetEntity=Compte::class, mappedBy="Medecin")
      */
     private $Compte;
 

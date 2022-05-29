@@ -40,7 +40,7 @@ class Vaccin
     private $Reserve;
 
     /**
-     * @ORM\OneToOne(targetEntity=Vaccination::class, inversedBy="vaccins")
+     * @ORM\OneToOne(targetEntity=Vaccination::class, mappedBy="Vaccin")
      */
     private $Vaccination;
 

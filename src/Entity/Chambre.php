@@ -28,16 +28,16 @@ class Chambre
     private $id;
     
     /**
-     * @ORM\ManyToOne(targetEntity=Service::class, inversedBy="chambres")
+     * @ORM\ManyToOne(targetEntity=Service::class, inversedBy="Chambres")
      * @Groups({"chambre_read"})
      */
     private $Service;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Lit::class, inversedBy="chambres")
+     * @ORM\OneToMany(targetEntity=Lit::class, mappedBy="Chambre")
      * @Groups({"chambre_read"})
      */
-    private $Lit;
+    private $Lits;
 
     public function getId(): ?int
     {
@@ -56,14 +56,14 @@ class Chambre
         return $this;
     }
 
-    public function getLit(): ?Lit
+    public function getLits(): ?Lit
     {
-        return $this->Lit;
+        return $this->Lits;
     }
 
-    public function setLit(Lit $Lit): self
+    public function setLits(Lit $Lits): self
     {
-        $this->Lit = $Lit;
+        $this->Lits = $Lits;
 
         return $this;
     }

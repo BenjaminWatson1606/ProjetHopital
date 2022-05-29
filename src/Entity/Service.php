@@ -40,7 +40,12 @@ class Service
     private $NombreLitDispo;
 
     /**
-     * @ORM\OneToOne(targetEntity=Infirmier::class, inversedBy="services")
+     * @ORM\OneToMany(targetEntity=Chambre::class, mappedBy="Service")
+     */
+    private $Chambres;
+
+    /**
+     * @ORM\OneToOne(targetEntity=Infirmier::class, mappedBy="Service")
      */
     private $Infirmier;
 
@@ -69,6 +74,19 @@ class Service
     public function setNombreLitDispo(int $NombreLitDispo): self
     {
         $this->NombreLitDispo = $NombreLitDispo;
+
+        return $this;
+    }
+
+
+    public function getChambres(): ?Chambre
+    {
+        return $this->Chambres;
+    }
+
+    public function setChambres(Chambre $Chambres): self
+    {
+        $this->Chambres = $Chambres;
 
         return $this;
     }

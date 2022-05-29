@@ -34,12 +34,12 @@ class Lit
     private $Disponibilite;
 
     /**
-     * @ORM\OneToOne(targetEntity=Chambre::class, inversedBy="lits")
+     * @ORM\ManyToOne(targetEntity=Chambre::class, inversedBy="Lits")
      */
     private $Chambre;
 
     /**
-     * @ORM\OneToOne(targetEntity=Patient::class, inversedBy="lits")
+     * @ORM\OneToOne(targetEntity=Patient::class, inversedBy="Lit")
      */
     private $Patient;
 
