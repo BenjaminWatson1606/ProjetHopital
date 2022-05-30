@@ -19,6 +19,14 @@
     box-sizing: border-box
 }
 
+.centre {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: auto;
+    margin-bottom:auto
+}
+
 #accueil-titre{
     position: fixed; /* or absolute */
     top: 45%;
@@ -212,7 +220,7 @@ a {
 
     .l-navbar {
         left: 0;
-        padding: 1rem 1rem 0 0
+        
     }
 
     .show {
