@@ -56,26 +56,44 @@ const login = ({ onLogin, history }) => {
                                     </div>
                                 </div>
                                 <div className="card-body">
-                                    <form method="post">
-
-                                        <label for="inputUsername">Nom d'utilisateur</label>
-                                        <input type="text" name="username" id="inputUsername" className="form-control" autocomplete="username" required autofocus></input>
-                                        <label for="inputPassword">Mot de passe</label>
-                                        <input type="password" name="password" id="inputPassword" className="form-control" autocomplete="current-password" required></input>
-
-                                        <input type="hidden" name="_csrf_token"
-                                              value="{{ csrf_token('authenticate') }}"
-                                        ></input>
-
-
-                                        <button className="btn bg-gradient-primary w-100 my-4 mb-2" type="submit">
-                                            Connexion
-                                        </button>
+                                  <form role="form" onSubmit={handleSubmit}>
+                                    <label htmlFor="username" className="form-label mt-4 montserrat">
+                                    {t("username")}
+                                    </label>
+                                    <input
+                                      value={credentials.username}
+                                      onChange={handleChange}
+                                      type="text"
+                                      className={"form-control montserrat" + (error && " is-invalid")}
+                                      id="username"
+                                      name="username"
+                                      placeholder="Enter username"
+                                      />
+                                      {error && <p className="invalid-feedback">{error}</p>}{" "}
+                                      <div className="form-group">
+                                      <label htmlFor="password" className="form-label mt-4 montserrat">
+                                        {t("password")}
+                                      </label>
+                                      <input
+                                        value={credentials.password}
+                                        onChange={handleChange}
+                                        type="password"
+                                        className="form-control montserrat"
+                                        id="password"
+                                        name="password"
+                                        placeholder="Password"
+                                      />
+                                      </div>
+                                      <div className="form-check form-switch montserrat">
+                                        <input className="form-check-input" id=" customCheckLogin" type="checkbox" />
+                                        <label className="form-check-label" htmlFor=" customCheckLogin">
+                                          <span className="text-muted">Remember me</span>
+                                        </label>
+                                      </div>
+                                      <div className="text-center">
+                                        <button type="submit" className="btn bg-gradient-primary w-100 my-4 mb-2"> {t("submit")}</button>
+                                      </div>
                                     </form>
-
-                                    <a href="#/register"><button className="btn bg-gradient-primary w-100 my-4 mb-2" type="button">
-                                        Inscription
-                                    </button></a>
 
                                 </div>
                             </div>
@@ -87,6 +105,5 @@ const login = ({ onLogin, history }) => {
       </div>
   );
 };    
-
 export default login;
 
