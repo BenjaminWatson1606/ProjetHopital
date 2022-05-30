@@ -5,6 +5,8 @@ import axios from "axios";
 import Moment from "moment";
 import { toast } from "react-toastify";
 import Select from 'react-select';
+import ReactBSAlert from "react-bootstrap-sweetalert";
+import "sweetalert2/dist/sweetalert2.min.css";
 import {
     Button,
     ButtonGroup,
@@ -23,8 +25,9 @@ import {
     
     const { t } = useTranslation();
     const [patients, setPatients] = useState([]);
+    const [alert, setAlert] = useState()
     const [modalChange, setModalChange] = useState(false)
-    let [newPatient, setNewPatient] = useState({
+    let [currentPatient, setcurrentPatient] = useState({
       id: undefined,
       NomPatient: undefined,
       PrenomPatient: undefined,
@@ -44,6 +47,72 @@ import {
     useEffect(() => {
       fetchPatients()
     }, [])
+
+    const deleteEventSweetAlert = () => {
+      console.log("ouais")
+      setAlert(
+        <ReactBSAlert
+          warning
+          style={{ display: "block", marginTop: "-100px" }}
+          title="Are you sure?"
+          onConfirm={deleteEvent}
+          onCancel={() =>
+            setAlert(null)
+          }
+          confirmBtnCssClass="danger"
+          cancelBtnBsStyle="btn-secondary"
+          confirmBtnText="Yes, delete it"
+          cancelBtnText="Cancel"
+          showCancel
+          btnSize=""
+        >
+          You won't be able to revert this!
+        </ReactBSAlert>
+      )
+    };
+
+    const deleteEvent = () => {
+          try {
+            axios.delete("http://localhost:8000/api/patients/" + currentPatient.id)
+            toast.success(t("deletedEvent"))
+          } catch (error) {
+            if (error.response) {
+              // Request made and server responded
+              console.log(error.response.data);
+              console.log(error.response.status);
+              console.log(error.response.headers);
+            } else if (error.request) {
+              // The request was made but no response was received
+              console.log(error.request);
+            } else {
+              // Something happened in setting up the request that triggered an Error
+              console.log('Error', error.message);
+            }
+            toast.error(t("errorOccured"))
+          }
+          setAlert(
+            <ReactBSAlert
+              success
+              style={{ display: "block", marginTop: "-100px" }}
+              title="Success"
+              onConfirm={() => setAlert(null)}
+              confirmBtnBsStyle="primary"
+              confirmBtnText="Ok"
+              btnSize=""
+            >
+              Patient supprimé !
+            </ReactBSAlert>
+          )
+      setModalChange(false),
+      currentPatient.id= undefined,
+      currentPatient.NomPatient= undefined,
+      currentPatient.PrenomPatient= undefined,
+      currentPatient.DateDepart= undefined,
+      currentPatient.DateArrivee= undefined,
+      currentPatient.AgePatient= undefined,
+      currentPatient.AdressePatient= undefined,
+      currentPatient.TypePatient= undefined
+    }
 
     const fetchPatients = async () => {
   
@@ -80,35 +149,38 @@ import {
     }
   
     const handleModify = (patient) => {
-      newPatient.id = patient.id
-      newPatient.NomPatient = patient.NomPatient
-      newPatient.PrenomPatient = patient.PrenomPatient
-      newPatient.DateDepart = patient.DateDepart
-      newPatient.DateArrivee = patient.DateArrivee
-      newPatient.AgePatient = patient.AgePatient
-      newPatient.AdressePatient = patient.AdressePatient
-      newPatient.TypePatient = patient.TypePatient
-      setSelectedOption(patient.TypePatient)
+      currentPatient.id = patient.id
+      currentPatient.NomPatient = patient.NomPatient
+      currentPatient.PrenomPatient = patient.PrenomPatient
+      currentPatient.DateDepart = patient.DateDepart
+      currentPatient.DateArrivee = patient.DateArrivee
+      currentPatient.AgePatient = patient.AgePatient
+      currentPatient.AdressePatient = patient.AdressePatient
+      currentPatient.TypePatient = patient.TypePatient
+      setSelectedOption({label:[patient.TypePatient], value: [patient.TypePatient]})
+      console.log(selectedOption)
       setModalChange(true)
     }
 
-    const changePatient = (patient) => {
-      console.log(newPatient.NomPatient)
-      console.log(newPatient.PrenomPatient)
-      console.log(newPatient.DateDepart)
-      console.log(newPatient.DateArrivee)
-      console.log(newPatient.AgePatient)
-      console.log(newPatient.AdressePatient)
+    const changePatient = () => {
+      console.log(currentPatient.NomPatient)
+      console.log(currentPatient.PrenomPatient)
+      console.log(currentPatient.DateDepart)
+      console.log(currentPatient.DateArrivee)
+      console.log(currentPatient.AgePatient)
+      console.log(currentPatient.AdressePatient)
+      const headers = { 'Content-Type': 'application/merge-patch+json' }
       try {
-        axios.patch("http://localhost:8000/api/patients/" + newPatient.id, {
-          NomPatient: newPatient.NomPatient,
-          PrenomPatient: newPatient.PrenomPatient,
-          DateDepart: newPatient.DateDepart,
-          DateArrivee: newPatient.DateArrivee,
-          AgePatient: newPatient.AgePatient,
-          AdressePatient: newPatient.AdressePatient,
+        axios.patch("http://localhost:8000/api/patients/" + currentPatient.id, {
+          NomPatient: currentPatient.NomPatient,
+          PrenomPatient: currentPatient.PrenomPatient,
+          DateDepart: currentPatient.DateDepart,
+          DateArrivee: currentPatient.DateArrivee,
+          AgePatient: parseInt(currentPatient.AgePatient),
+          AdressePatient: currentPatient.AdressePatient,
           TypePatient: selectedOption.value
-        })
+        }, 
+        {headers} )
         toast.success("Patient modifié")
       } catch (error) {
         if (error.response) {
@@ -130,6 +202,7 @@ import {
 
     return (
         <>
+          {alert}
           <div className="patientsArray">
             <table id="patientsTable" className="table table-dark">
 
@@ -176,10 +249,10 @@ import {
                       placeholder="Nom du Patient"
                       type="text"
                       onChange={e => {
-                        newPatient.NomPatient = e.target.value
+                        currentPatient.NomPatient = e.target.value
                       }
                       }
-                      defaultValue={newPatient.NomPatient}
+                      defaultValue={currentPatient.NomPatient}
                     />
                   </FormGroup>
                   <FormGroup>
@@ -189,10 +262,10 @@ import {
                       placeholder="Prénom du Patient"
                       type="text"
                       onChange={e => {
-                        newPatient.PrenomPatient = e.target.value
+                        currentPatient.PrenomPatient = e.target.value
                       }
                       }
-                      defaultValue={newPatient.PrenomPatient}
+                      defaultValue={currentPatient.PrenomPatient}
                     />
                   </FormGroup>
                   <FormGroup>
@@ -202,10 +275,10 @@ import {
                       placeholder="Date d'arrivée du Patient"
                       type="date"
                       onChange={e => {
-                        newPatient.DateArrivee = e.target.value
+                        currentPatient.DateArrivee = e.target.value
                       }
                       }
-                      defaultValue={Moment(newPatient.DateArrivee).format("YYYY-MM-DD")}
+                      defaultValue={Moment(currentPatient.DateArrivee).format("YYYY-MM-DD")}
                     />
                   </FormGroup>
 
@@ -216,10 +289,10 @@ import {
                       placeholder="Date de départ du Patient"
                       type="date"
                       onChange={e => {
-                        newPatient.DateDepart = e.target.value
+                        currentPatient.DateDepart = e.target.value
                       }
                       }
-                      defaultValue={Moment(newPatient.DateDepart).format("YYYY-MM-DD")}
+                      defaultValue={Moment(currentPatient.DateDepart).format("YYYY-MM-DD")}
                     />
                   </FormGroup>
                   <FormGroup>
@@ -229,30 +302,44 @@ import {
                       placeholder="Âge du Patient"
                       type="text"
                       onChange={e => {
-                        newPatient.AgePatient = e.target.value
+                        currentPatient.AgePatient = e.target.value
                       }
                       }
-                      defaultValue={newPatient.AgePatient}
+                      defaultValue={currentPatient.AgePatient}
+                    />
+                  </FormGroup>
+                  <FormGroup>
+                    <label className="form-control-label">Adresse du Patient</label>
+                    <Input
+                      className="form-control-alternative edit-event--title"
+                      placeholder="Adresse du Patient"
+                      type="text"
+                      onChange={e => {
+                        currentPatient.AdressePatient = e.target.value
+                      }
+                      }
+                      defaultValue={currentPatient.AdressePatient}
                     />
                   </FormGroup>
                   <FormGroup>
                     <label className="form-control-label">Type de Patient</label>
                     <Select
-                    options={options}
-                    onChange={setSelectedOption}
-                    name="AbsenceType"
-                    value={selectedOption}
-                    theme={(theme) => ({
-                      ...theme,
-                      borderRadius: 0,
-                      colors: {
-                        ...theme.colors,
-                        primary25: '#8dd7cf',
-                        primary: '#c3cfd9'
+                      options={options}
+                      onChange={setSelectedOption}
+                      name="AbsenceType"
+                      defaultValue={selectedOption}
+                      value={selectedOption}
+                      theme={(theme) => ({
+                        ...theme,
+                        borderRadius: 0,
+                        colors: {
+                          ...theme.colors,
+                          primary25: '#8dd7cf',
+                          primary: '#c3cfd9'
 
-                      },
-                    })}
-                  />
+                        },
+                      })}
+                    />
                   </FormGroup>
 
                   <input className="edit-event--id" type="hidden" />
@@ -264,12 +351,9 @@ import {
                 </Button>
                 <Button
                   color="danger"
-                  onClick={() =>
-                    setModalChange(false)
-                      
-                  }
+                  onClick={deleteEventSweetAlert}
                 > 
-                  Delete
+                  Supprimer
                 </Button> 
                 <Button
                   className="ml-auto"
