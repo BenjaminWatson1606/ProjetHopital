@@ -48,11 +48,11 @@ const NavBar = ({ isAuthenticated, setIsAuthenticated }) => {
                   </NavLink>
 
                       <div className="nav_list"> 
-                          <a href="." className="nav_link active"> <i className='bx bx-grid-alt nav_icon'></i> <span className="nav_name">Patient</span> </a> 
-                          <a href="." className="nav_link"> <i className='bx bx-user nav_icon'></i> <span className="nav_name">Lit</span> </a> 
-                          <a href="."className="nav_link"> <i className='bx bx-message-square-detail nav_icon'></i> <span className="nav_name">Chambre</span> </a> 
-                          <a href="." className="nav_link"> <i className='bx bx-bookmark nav_icon'></i> <span className="nav_name">Service</span> </a> 
-                          <a href="." className="nav_link"> <i className='bx bx-user nav_icon'></i> <span className="nav_name">Comptes</span></a>
+                          <a href="/#/patient" className="nav_link active"> <i className='bx bx-grid-alt nav_icon'></i> <span className="nav_name">Patient</span> </a> 
+                          <a href="/#/lit" className="nav_link"> <i className='bx bx-user nav_icon'></i> <span className="nav_name">Lit</span> </a> 
+                          <a href="/#/chambre"className="nav_link"> <i className='bx bx-message-square-detail nav_icon'></i> <span className="nav_name">Chambre</span> </a> 
+                          <a href="/#/service" className="nav_link"> <i className='bx bx-bookmark nav_icon'></i> <span className="nav_name">Service</span> </a> 
+                          <a href="/#/compte" className="nav_link"> <i className='bx bx-user nav_icon'></i> <span className="nav_name">Comptes</span></a>
                       </div>
                     
                   </div> 

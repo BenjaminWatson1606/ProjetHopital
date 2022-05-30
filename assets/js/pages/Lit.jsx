@@ -77,7 +77,12 @@ import {
                   <tr>
                     <td>{lit.id}</td>
                     <td>{lit.Chambre.id}</td>
-                    <td>{lit.Patient.id}</td>
+                    {!lit.Patient &&
+                        <td>/</td>
+                    }
+                    {lit.Patient &&
+                        <td>{lit.Patient.id}</td>
+                    }
                     <td>{lit.disponibilite}</td>
                   </tr>))}
               </tbody>
