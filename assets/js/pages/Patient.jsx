@@ -53,7 +53,7 @@ import {
       setAlert(
         <ReactBSAlert
           warning
-          style={{ display: "block", marginTop: "-100px" }}
+          style={{ display: "block", marginTop: "0px" }}
           title="Are you sure?"
           onConfirm={deleteEvent}
           onCancel={() =>
@@ -93,7 +93,7 @@ import {
           setAlert(
             <ReactBSAlert
               success
-              style={{ display: "block", marginTop: "-100px" }}
+              style={{ display: "block" }}
               title="Success"
               onConfirm={() => setAlert(null)}
               confirmBtnBsStyle="primary"
@@ -115,7 +115,6 @@ import {
     }
 
     const fetchPatients = async () => {
-  
       try {
         await axios
           .get("http://localhost:8000/api/patients")
