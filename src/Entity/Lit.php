@@ -26,7 +26,7 @@ class Lit
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
-     * @Groups({"lit_read"})
+     * @Groups({"lit_read", "patient_read"})
      */
     private $id;
 
@@ -51,6 +51,13 @@ class Lit
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function setId(int $Id): ?self
+    {
+        $this->id = $Id;
+        
+        return $this;
     }
 
     public function getDisponibilite(): ?bool
@@ -82,10 +89,16 @@ class Lit
         return $this->Patient;
     }
 
-    public function setPatient(Patient $Patient): self
+    public function setPatient(?Patient $Patient): self
     {
-        $this->Patient = $Patient;
+        if ($Patient != null && $Patient != ""){
+            $this->Disponibilite = false;
+        }else{
+            $this->Disponibilite = true;
+        }
 
+        $this->Patient = $Patient;
+        
         return $this;
     }
 }

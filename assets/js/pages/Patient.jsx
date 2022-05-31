@@ -61,6 +61,117 @@ import {
       fetchPatients()
     }, [])
 
+    const fetchPatients = async () => {
+      try {
+        await axios
+          .get("http://localhost:8000/api/patients")
+          .then((response) => setPatients(response.data["hydra:member"]))
+      } catch (error) {
+        if (error.response) {
+          // Request made and server responded
+          console.log(error.response.data);
+          console.log(error.response.status);
+          console.log(error.response.headers);
+        } else if (error.request) {
+          // The request was made but no response was received
+          console.log(error.request);
+        } else {
+          // Something happened in setting up the request that triggered an Error
+          console.log('Error', error.message);
+        }
+      }
+    };
+
+    const toIsoString = (date) => {
+      let correctDate = new Date(date);
+      var pad = function (num) {
+          var norm = Math.floor(Math.abs(num));
+          return (norm < 10 ? '0' : '') + norm;
+      };
+
+      return correctDate.getFullYear() +
+          '-' + pad(correctDate.getMonth() + 1) +
+          '-' + pad(correctDate.getDate())
+    }
+
+    const addPatient = () => {
+      try {
+        axios.post("http://localhost:8000/api/patients", {
+          NomPatient: newPatient.NomPatient,
+          PrenomPatient: newPatient.PrenomPatient,
+          NumSecuriteSociale: parseInt(newPatient.NumSecuriteSociale),
+          DateDepart: newPatient.DateDepart,
+          DateArrivee: newPatient.DateArrivee,
+          AgePatient: parseInt(newPatient.AgePatient),
+          AdressePatient: newPatient.AdressePatient,
+          TypePatient: selectedOption.value
+        })
+        toast.success("Patient ajouté")
+      } catch (error) {
+        if (error.response) {
+          // Request made and server responded
+          console.log(error.response.data);
+          console.log(error.response.status);
+          console.log(error.response.headers);
+        } else if (error.request) {
+          // The request was made but no response was received
+          console.log(error.request);
+        } else {
+          // Something happened in setting up the request that triggered an Error
+          console.log('Error', error.message);
+        }
+        toast.error(t("errorOccured"))
+      }
+
+    }
+
+    const handleModify = (patient) => {
+      currentPatient.id = patient.id
+      currentPatient.NomPatient = patient.NomPatient
+      currentPatient.PrenomPatient = patient.PrenomPatient
+      currentPatient.NumSecuriteSociale = patient.NumSecuriteSociale
+      currentPatient.DateDepart = patient.DateDepart
+      currentPatient.DateArrivee = patient.DateArrivee
+      currentPatient.AgePatient = patient.AgePatient
+      currentPatient.AdressePatient = patient.AdressePatient
+      currentPatient.TypePatient = patient.TypePatient
+      setSelectedOption({label:[patient.TypePatient], value: [patient.TypePatient]})
+      setModalChange(true)
+    }
+
+    const changePatient = () => {
+      const headers = { 'Content-Type': 'application/merge-patch+json' }
+      try {
+        axios.patch("http://localhost:8000/api/patients/" + currentPatient.id, {
+          NomPatient: currentPatient.NomPatient,
+          PrenomPatient: currentPatient.PrenomPatient,
+          NumSecuriteSociale: parseInt(currentPatient.NumSecuriteSociale),
+          DateArrivee: currentPatient.DateArrivee,
+          DateDepart: currentPatient.DateDepart,
+          AgePatient: parseInt(currentPatient.AgePatient),
+          AdressePatient: currentPatient.AdressePatient,
+          TypePatient: selectedOption.value.toString()
+        }, 
+        {headers} )
+        toast.success("Patient modifié")
+      } catch (error) {
+        if (error.response) {
+          // Request made and server responded
+          console.log(error.response.data);
+          console.log(error.response.status);
+          console.log(error.response.headers);
+        } else if (error.request) {
+          // The request was made but no response was received
+          console.log(error.request);
+        } else {
+          // Something happened in setting up the request that triggered an Error
+          console.log('Error', error.message);
+        }
+        toast.error(t("errorOccured"))
+      }
+
+    }
+
     const deletePatientSweetAlert = () => {
       setAlert(
         <ReactBSAlert
@@ -126,117 +237,6 @@ import {
       currentPatient.AgePatient= undefined,
       currentPatient.AdressePatient= undefined,
       currentPatient.TypePatient= undefined
-    }
-
-    const fetchPatients = async () => {
-      try {
-        await axios
-          .get("http://localhost:8000/api/patients")
-          .then((response) => setPatients(response.data["hydra:member"]))
-      } catch (error) {
-        if (error.response) {
-          // Request made and server responded
-          console.log(error.response.data);
-          console.log(error.response.status);
-          console.log(error.response.headers);
-        } else if (error.request) {
-          // The request was made but no response was received
-          console.log(error.request);
-        } else {
-          // Something happened in setting up the request that triggered an Error
-          console.log('Error', error.message);
-        }
-      }
-    };
-
-    const toIsoString = (date) => {
-      let correctDate = new Date(date);
-      var pad = function (num) {
-          var norm = Math.floor(Math.abs(num));
-          return (norm < 10 ? '0' : '') + norm;
-      };
-
-      return correctDate.getFullYear() +
-          '-' + pad(correctDate.getMonth() + 1) +
-          '-' + pad(correctDate.getDate())
-    }
-  
-    const handleModify = (patient) => {
-      currentPatient.id = patient.id
-      currentPatient.NomPatient = patient.NomPatient
-      currentPatient.PrenomPatient = patient.PrenomPatient
-      currentPatient.NumSecuriteSociale = patient.NumSecuriteSociale
-      currentPatient.DateDepart = patient.DateDepart
-      currentPatient.DateArrivee = patient.DateArrivee
-      currentPatient.AgePatient = patient.AgePatient
-      currentPatient.AdressePatient = patient.AdressePatient
-      currentPatient.TypePatient = patient.TypePatient
-      setSelectedOption({label:[patient.TypePatient], value: [patient.TypePatient]})
-      setModalChange(true)
-    }
-
-    const addPatient = () => {
-      try {
-        axios.post("http://localhost:8000/api/patients", {
-          NomPatient: newPatient.NomPatient,
-          PrenomPatient: newPatient.PrenomPatient,
-          NumSecuriteSociale: parseInt(newPatient.NumSecuriteSociale),
-          DateDepart: newPatient.DateDepart,
-          DateArrivee: newPatient.DateArrivee,
-          AgePatient: parseInt(newPatient.AgePatient),
-          AdressePatient: newPatient.AdressePatient,
-          TypePatient: selectedOption.value
-        })
-        toast.success("Patient ajouté")
-      } catch (error) {
-        if (error.response) {
-          // Request made and server responded
-          console.log(error.response.data);
-          console.log(error.response.status);
-          console.log(error.response.headers);
-        } else if (error.request) {
-          // The request was made but no response was received
-          console.log(error.request);
-        } else {
-          // Something happened in setting up the request that triggered an Error
-          console.log('Error', error.message);
-        }
-        toast.error(t("errorOccured"))
-      }
-
-    }
-
-    const changePatient = () => {
-      const headers = { 'Content-Type': 'application/merge-patch+json' }
-      try {
-        axios.patch("http://localhost:8000/api/patients/" + currentPatient.id, {
-          NomPatient: currentPatient.NomPatient,
-          PrenomPatient: currentPatient.PrenomPatient,
-          NumSecuriteSociale: parseInt(currentPatient.NumSecuriteSociale),
-          DateArrivee: currentPatient.DateArrivee,
-          DateDepart: currentPatient.DateDepart,
-          AgePatient: parseInt(currentPatient.AgePatient),
-          AdressePatient: currentPatient.AdressePatient,
-          TypePatient: selectedOption.value.toString()
-        }, 
-        {headers} )
-        toast.success("Patient modifié")
-      } catch (error) {
-        if (error.response) {
-          // Request made and server responded
-          console.log(error.response.data);
-          console.log(error.response.status);
-          console.log(error.response.headers);
-        } else if (error.request) {
-          // The request was made but no response was received
-          console.log(error.request);
-        } else {
-          // Something happened in setting up the request that triggered an Error
-          console.log('Error', error.message);
-        }
-        toast.error(t("errorOccured"))
-      }
-
     }
 
     return (

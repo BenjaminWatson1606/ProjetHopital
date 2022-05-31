@@ -35,12 +35,6 @@ class Service
     private $NomService;
 
     /**
-     * @ORM\Column(type="string")
-     * @Groups({"service_read"})
-     */
-    private $NombreLitDispo;
-
-    /**
      * @ORM\OneToMany(targetEntity=Chambre::class, mappedBy="Service")
      */
     private $Chambres;
@@ -66,19 +60,6 @@ class Service
 
         return $this;
     }
-
-    public function getNombreLitDispo(): ?int
-    {
-        return $this->NombreLitDispo;
-    }
-
-    public function setNombreLitDispo(int $NombreLitDispo): self
-    {
-        $this->NombreLitDispo = $NombreLitDispo;
-
-        return $this;
-    }
-
 
     public function getChambres(): ?Collection
     {

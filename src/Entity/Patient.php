@@ -78,6 +78,7 @@ class Patient
 
     /**
      * @ORM\OneToOne(targetEntity=Lit::class, mappedBy="Patient")
+     * @Groups({"patient_read"})
      */
     private $Lit;
 

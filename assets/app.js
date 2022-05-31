@@ -5,7 +5,6 @@ import RoleBasedRouting from "./js/components/authorization/RoleBasedRouting";
 import HomePage from "./js/pages/HomePage";
 import Login from "./js/pages/Login";
 import AuthAPI from "./js/services/authAPI";
-import Rh from "./js/pages/Rh";
 import Popup from "react-popup";
 import NavBar from "./js/components/Navbar";
 import "./i18nextConf";
@@ -85,12 +84,6 @@ const App = () => {
                 render={(props) => (
                   <Login onLogin={setIsAuthenticated} {...props} />
                 )}
-              />
-
-              <PrivateRoute
-                path="/rh"
-                isAuthenticated={isAuthenticated}
-                component={Rh}
               />
 
               <PrivateRoute
