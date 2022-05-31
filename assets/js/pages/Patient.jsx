@@ -172,7 +172,6 @@ import {
       currentPatient.AdressePatient = patient.AdressePatient
       currentPatient.TypePatient = patient.TypePatient
       setSelectedOption({label:[patient.TypePatient], value: [patient.TypePatient]})
-      console.log(selectedOption)
       setModalChange(true)
     }
 
@@ -208,7 +207,6 @@ import {
     }
 
     const changePatient = () => {
-      console.log(selectedOption.value);
       const headers = { 'Content-Type': 'application/merge-patch+json' }
       try {
         axios.patch("http://localhost:8000/api/patients/" + currentPatient.id, {
