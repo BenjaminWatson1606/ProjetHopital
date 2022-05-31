@@ -91,7 +91,7 @@ class Patient
         return $this->id;
     }
 
-    public function getNumSecuriteSociales(): ?int
+    public function getNumSecuriteSociale(): ?int
     {
         return $this->NumSecuriteSociale;
     }

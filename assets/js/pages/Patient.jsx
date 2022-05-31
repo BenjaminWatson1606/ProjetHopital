@@ -27,10 +27,23 @@ import {
     const [patients, setPatients] = useState([]);
     const [alert, setAlert] = useState()
     const [modalChange, setModalChange] = useState(false)
-    let [currentPatient, setcurrentPatient] = useState({
+    const [modalAdd, setModalAdd] = useState(false)
+    let [currentPatient, setCurrentPatient] = useState({
       id: undefined,
       NomPatient: undefined,
       PrenomPatient: undefined,
+      NumSecuriteSociale: undefined,
+      DateDepart: undefined,
+      DateArrivee: undefined,
+      AgePatient: undefined,
+      AdressePatient: undefined,
+      TypePatient: undefined
+    })
+    let [newPatient, setNewPatient] = useState({
+      id: undefined,
+      NomPatient: undefined,
+      PrenomPatient: undefined,
+      NumSecuriteSociale: undefined,
       DateDepart: undefined,
       DateArrivee: undefined,
       AgePatient: undefined,
@@ -48,14 +61,13 @@ import {
       fetchPatients()
     }, [])
 
-    const deleteEventSweetAlert = () => {
-      console.log("ouais")
+    const deletePatientSweetAlert = () => {
       setAlert(
         <ReactBSAlert
           warning
           style={{ display: "block", marginTop: "0px" }}
           title="Are you sure?"
-          onConfirm={deleteEvent}
+          onConfirm={deletePatient}
           onCancel={() =>
             setAlert(null)
           }
@@ -71,42 +83,44 @@ import {
       )
     };
 
-    const deleteEvent = () => {
-          try {
-            axios.delete("http://localhost:8000/api/patients/" + currentPatient.id)
-            toast.success(t("deletedEvent"))
-          } catch (error) {
-            if (error.response) {
-              // Request made and server responded
-              console.log(error.response.data);
-              console.log(error.response.status);
-              console.log(error.response.headers);
-            } else if (error.request) {
-              // The request was made but no response was received
-              console.log(error.request);
-            } else {
-              // Something happened in setting up the request that triggered an Error
-              console.log('Error', error.message);
-            }
-            toast.error(t("errorOccured"))
-          }
-          setAlert(
-            <ReactBSAlert
-              success
-              style={{ display: "block" }}
-              title="Success"
-              onConfirm={() => setAlert(null)}
-              confirmBtnBsStyle="primary"
-              confirmBtnText="Ok"
-              btnSize=""
-            >
-              Patient supprimé !
-            </ReactBSAlert>
-          )
+    const deletePatient = () => {
+
+      try {
+        axios.delete("http://localhost:8000/api/patients/" + currentPatient.id)
+        toast.success(t("deletedEvent"))
+      } catch (error) {
+        if (error.response) {
+          // Request made and server responded
+          console.log(error.response.data);
+          console.log(error.response.status);
+          console.log(error.response.headers);
+        } else if (error.request) {
+          // The request was made but no response was received
+          console.log(error.request);
+        } else {
+          // Something happened in setting up the request that triggered an Error
+          console.log('Error', error.message);
+        }
+        toast.error(t("errorOccured"))
+      }
+      setAlert(
+        <ReactBSAlert
+          success
+          style={{ display: "block" }}
+          title="Success"
+          onConfirm={() => setAlert(null)}
+          confirmBtnBsStyle="primary"
+          confirmBtnText="Ok"
+          btnSize=""
+        >
+          Patient supprimé !
+        </ReactBSAlert>
+      )
       setModalChange(false),
       currentPatient.id= undefined,
       currentPatient.NomPatient= undefined,
       currentPatient.PrenomPatient= undefined,
+      currentPatient.NumSecuriteSociale= undefined,
       currentPatient.DateDepart= undefined,
       currentPatient.DateArrivee= undefined,
       currentPatient.AgePatient= undefined,
@@ -151,6 +165,7 @@ import {
       currentPatient.id = patient.id
       currentPatient.NomPatient = patient.NomPatient
       currentPatient.PrenomPatient = patient.PrenomPatient
+      currentPatient.NumSecuriteSociale = patient.NumSecuriteSociale
       currentPatient.DateDepart = patient.DateDepart
       currentPatient.DateArrivee = patient.DateArrivee
       currentPatient.AgePatient = patient.AgePatient
@@ -161,23 +176,50 @@ import {
       setModalChange(true)
     }
 
+    const addPatient = () => {
+      try {
+        axios.post("http://localhost:8000/api/patients", {
+          NomPatient: newPatient.NomPatient,
+          PrenomPatient: newPatient.PrenomPatient,
+          NumSecuriteSociale: parseInt(newPatient.NumSecuriteSociale),
+          DateDepart: newPatient.DateDepart,
+          DateArrivee: newPatient.DateArrivee,
+          AgePatient: parseInt(newPatient.AgePatient),
+          AdressePatient: newPatient.AdressePatient,
+          TypePatient: selectedOption.value
+        })
+        toast.success("Patient ajouté")
+      } catch (error) {
+        if (error.response) {
+          // Request made and server responded
+          console.log(error.response.data);
+          console.log(error.response.status);
+          console.log(error.response.headers);
+        } else if (error.request) {
+          // The request was made but no response was received
+          console.log(error.request);
+        } else {
+          // Something happened in setting up the request that triggered an Error
+          console.log('Error', error.message);
+        }
+        toast.error(t("errorOccured"))
+      }
+
+    }
+
     const changePatient = () => {
-      console.log(currentPatient.NomPatient)
-      console.log(currentPatient.PrenomPatient)
-      console.log(currentPatient.DateDepart)
-      console.log(currentPatient.DateArrivee)
-      console.log(currentPatient.AgePatient)
-      console.log(currentPatient.AdressePatient)
+      console.log(selectedOption.value);
       const headers = { 'Content-Type': 'application/merge-patch+json' }
       try {
         axios.patch("http://localhost:8000/api/patients/" + currentPatient.id, {
           NomPatient: currentPatient.NomPatient,
           PrenomPatient: currentPatient.PrenomPatient,
-          DateDepart: currentPatient.DateDepart,
+          NumSecuriteSociale: parseInt(currentPatient.NumSecuriteSociale),
           DateArrivee: currentPatient.DateArrivee,
+          DateDepart: currentPatient.DateDepart,
           AgePatient: parseInt(currentPatient.AgePatient),
           AdressePatient: currentPatient.AdressePatient,
-          TypePatient: selectedOption.value
+          TypePatient: selectedOption.value.toString()
         }, 
         {headers} )
         toast.success("Patient modifié")
@@ -209,6 +251,7 @@ import {
                   <tr>
                     <th>Nom</th>
                     <th>Prenom</th>
+                    <th>Numéro de Sécurité Sociale</th>
                     <th>Date d'arrivée</th>
                     <th>Date de départ</th>
                     <th>Âge</th>
@@ -222,17 +265,21 @@ import {
                   <tr>
                     <td>{patient.NomPatient}</td>
                     <td>{patient.PrenomPatient}</td>
+                    <td>{patient.NumSecuriteSociale}</td>
                     <td>{toIsoString(patient.DateArrivee)}</td>
                     <td>{toIsoString(patient.DateDepart)}</td>
                     <td>{patient.AgePatient}</td>
                     <td>{patient.AdressePatient}</td>
                     <td>{patient.TypePatient}</td>
-                    <td><Button color="success" onClick={() => handleModify(patient)}>Modifier</Button></td> 
+                    <td><Button color="success" onClick={() => handleModify(patient)}>Modifier / Supprimer</Button></td> 
 
                   </tr>))}
               </tbody>
 
             </table>
+          </div>
+          <div>
+            <Button className="centre" color="success" onClick={() => setModalAdd(true)}>Ajouter</Button>
           </div>
           <Modal
             isOpen={modalChange}
@@ -265,6 +312,19 @@ import {
                       }
                       }
                       defaultValue={currentPatient.PrenomPatient}
+                    />
+                  </FormGroup>
+                  <FormGroup>
+                    <label className="form-control-label">Numéro de Sécurité Sociale</label>
+                    <Input
+                      className="form-control-alternative edit-event--title"
+                      placeholder="Numéro de Sécurité Sociale du Patient"
+                      type="text"
+                      onChange={e => {
+                        currentPatient.NumSecuriteSociale = e.target.value
+                      }
+                      }
+                      defaultValue={currentPatient.NumSecuriteSociale}
                     />
                   </FormGroup>
                   <FormGroup>
@@ -350,10 +410,140 @@ import {
                 </Button>
                 <Button
                   color="danger"
-                  onClick={deleteEventSweetAlert}
+                  onClick={deletePatientSweetAlert}
                 > 
                   Supprimer
                 </Button> 
+                <Button
+                  className="ml-auto"
+                  color="link"
+                  onClick={() => setModalChange(false)}
+                >
+                  Close
+                </Button>
+              </div>
+
+          </Modal>
+          <Modal
+            isOpen={modalAdd}
+            toggle={() => setModalAdd(false)}
+            className="modal-dialog-centered modal-secondary"
+          >
+            <div className="modal-body">
+                <Form className="edit-event--form">
+                  <FormGroup>
+                    <label className="form-control-label">Nom du Patient</label>
+                    <Input
+                      className="form-control-alternative edit-event--title"
+                      placeholder="Nom du Patient"
+                      type="text"
+                      onChange={e => {
+                        newPatient.NomPatient = e.target.value
+                      }
+                      }
+                    />
+                  </FormGroup>
+                  <FormGroup>
+                    <label className="form-control-label">Prénom du Patient</label>
+                    <Input
+                      className="form-control-alternative edit-event--title"
+                      placeholder="Prénom du Patient"
+                      type="text"
+                      onChange={e => {
+                        newPatient.PrenomPatient = e.target.value
+                      }
+                      }
+                    />
+                  </FormGroup>
+                  <FormGroup>
+                    <label className="form-control-label">Numéro de Sécurité Sociale</label>
+                    <Input
+                      className="form-control-alternative edit-event--title"
+                      placeholder="Numéro de Sécurité Sociale du Patient"
+                      type="text"
+                      onChange={e => {
+                        newPatient.NumSecuriteSociale = e.target.value
+                      }
+                      }
+                    />
+                  </FormGroup>
+                  <FormGroup>
+                    <label className="form-control-label">Date d'arrivée du Patient</label>
+                    <Input
+                      className="form-control-alternative edit-event--title"
+                      placeholder="Date d'arrivée du Patient"
+                      type="date"
+                      onChange={e => {
+                        newPatient.DateArrivee = e.target.value
+                      }
+                      }
+                    />
+                  </FormGroup>
+
+                  <FormGroup>
+                    <label className="form-control-label">Date de départ du Patient</label>
+                    <Input
+                      className="form-control-alternative edit-event--title"
+                      placeholder="Date de départ du Patient"
+                      type="date"
+                      onChange={e => {
+                        newPatient.DateDepart = e.target.value
+                      }
+                      }
+                    />
+                  </FormGroup>
+                  <FormGroup>
+                    <label className="form-control-label">Âge du Patient</label>
+                    <Input
+                      className="form-control-alternative edit-event--title"
+                      placeholder="Âge du Patient"
+                      type="text"
+                      onChange={e => {
+                        newPatient.AgePatient = e.target.value
+                      }
+                      }
+                    />
+                  </FormGroup>
+                  <FormGroup>
+                    <label className="form-control-label">Adresse du Patient</label>
+                    <Input
+                      className="form-control-alternative edit-event--title"
+                      placeholder="Adresse du Patient"
+                      type="text"
+                      onChange={e => {
+                        newPatient.AdressePatient = e.target.value
+                      }
+                      }
+                    />
+                  </FormGroup>
+                  <FormGroup>
+                    <label className="form-control-label">Type de Patient</label>
+                    <Select
+                      options={options}
+                      onChange={setSelectedOption}
+                      name="AbsenceType"
+                      defaultValue={{value:"Hospitalisation", label:"Hospitalisation"}}
+                      value={selectedOption}
+                      theme={(theme) => ({
+                        ...theme,
+                        borderRadius: 0,
+                        colors: {
+                          ...theme.colors,
+                          primary25: '#8dd7cf',
+                          primary: '#c3cfd9'
+
+                        },
+                      })}
+                    />
+                  </FormGroup>
+
+                  <input className="edit-event--id" type="hidden" />
+                </Form>
+              </div>
+              <div className="modal-footer">
+                <Button color="primary" onClick={addPatient} >
+                  Ajouter
+                </Button>
                 <Button
                   className="ml-auto"
                   color="link"
