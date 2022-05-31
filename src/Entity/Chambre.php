@@ -41,6 +41,11 @@ class Chambre
      */
     private $Lits;
 
+    public function __construct()
+    {
+        $this->Lits = new ArrayCollection();
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -58,17 +63,32 @@ class Chambre
         return $this;
     }
 
+    /**
+     * @return Collection|Lit[]
+     */
     public function getLits(): ?Collection
     {
         return $this->Lits;
     }
 
-    public function setLits(Lit $Lit): self
+    public function addLit(Lit $Lit): self
     {
         if (!$this->Lits->contains($Lit)) {
             $this->Lits[] = $Lit;
-            $Lit->setUtilisateur($this);
+            $Lit->setChambre($this);
         }
+
+        return $this;
+    }
+
+    public function removeLit(Lit $Lit): self
+    {
+        if ($this->Lits->removeElement($Lit)){
+            if ($Lit->getChambre() === $this) {
+                $Lit->setChambre(null);
+            }
+        }
+        
 
         return $this;
     }

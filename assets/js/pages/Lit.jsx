@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import axios from "axios";
 import { toast } from "react-toastify";
 import ReactBSAlert from "react-bootstrap-sweetalert";
+import Select from 'react-select';
 import "sweetalert2/dist/sweetalert2.min.css";
 import {
     Button,
@@ -248,7 +249,7 @@ import {
                     <Input
                       className="form-control-alternative edit-event--title"
                       placeholder="Chambre associée"
-                      type="text"
+                      type="number"
                       onChange={e => {
                         currentLit.ChambreId = e.target.value
                       }
@@ -261,7 +262,7 @@ import {
                     <Input
                       className="form-control-alternative edit-event--title"
                       placeholder="Patient associé"
-                      type="text"
+                      type="number"
                       onChange={e => {
                         currentLit.PatientId = e.target.value
                       }
@@ -275,7 +276,7 @@ import {
               </div>
               <div className="modal-footer">
                 <Button color="primary" onClick={changeLit} >
-                  Update
+                  Modifier
                 </Button>
                 <Button
                   color="danger"
@@ -305,7 +306,7 @@ import {
                     <Input
                       className="form-control-alternative edit-event--title"
                       placeholder="Chambre associée"
-                      type="text"
+                      type="number"
                       onChange={e => {
                         newLit.ChambreId = e.target.value
                       }
@@ -317,7 +318,7 @@ import {
                     <Input
                       className="form-control-alternative edit-event--title"
                       placeholder="Patient associé"
-                      type="text"
+                      type="number"
                       onChange={e => {
                         newLit.PatientId = e.target.value
                       }

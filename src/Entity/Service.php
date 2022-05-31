@@ -40,9 +40,14 @@ class Service
     private $Chambres;
 
     /**
-     * @ORM\OneToOne(targetEntity=Infirmier::class, mappedBy="Service")
+     * @ORM\OneToOne(targetEntity=Infirmier::class, inversedBy="Service")
      */
     private $Infirmier;
+
+    public function __construct()
+    {
+        $this->Chambres = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -61,14 +66,32 @@ class Service
         return $this;
     }
 
+    /**
+     * @return Collection|Chambre[]
+     */
     public function getChambres(): ?Collection
     {
         return $this->Chambres;
     }
 
-    public function setChambres(Chambre $Chambres): self
+    public function addChambre(Chambre $Chambre): self
     {
-        $this->Chambres = $Chambres;
+        if (!$this->Chambres->contains($Chambre)) {
+            $this->Chambres[] = $Chambre;
+            $Chambre->setChambre($this);
+        }
+
+        return $this;
+    }
+
+    public function removeChambre(Chambre $Chambre): self
+    {
+        if ($this->Chambres->removeElement($Chambre)){
+            if ($Chambre->getChambre() === $this) {
+                $Chambre->setChambre(null);
+            }
+        }
+        
 
         return $this;
     }

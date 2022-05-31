@@ -404,7 +404,7 @@ import {
               </div>
               <div className="modal-footer">
                 <Button color="primary" onClick={changePatient} >
-                  Update
+                  Modifier
                 </Button>
                 <Button
                   color="danger"
