@@ -545,7 +545,7 @@ import {
                 <Button
                   className="ml-auto"
                   color="link"
-                  onClick={() => setModalChange(false)}
+                  onClick={() => setModalAdd(false)}
                 >
                   Close
                 </Button>
