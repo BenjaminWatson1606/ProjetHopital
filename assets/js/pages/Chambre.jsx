@@ -181,7 +181,7 @@ import {
     return (
         <>
           {alert}
-          <div className="chambresArray">
+          <div className="HopitalArray">
             <table id="chambresTable" className="table table-dark">
 
               <thead>

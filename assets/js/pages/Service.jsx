@@ -90,7 +90,7 @@ import {
   
     return (
         <>
-          <div className="servicesArray">
+          <div className="HopitalArray">
             <table id="servicesTable" className="table table-dark">
               <thead>
                   <tr>

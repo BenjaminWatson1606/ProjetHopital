@@ -242,7 +242,7 @@ import {
     return (
         <>
           {alert}
-          <div className="patientsArray">
+          <div className="HopitalArray">
             <table id="patientsTable" className="table table-dark">
 
               <thead>

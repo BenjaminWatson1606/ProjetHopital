@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { NavLink } from "react-router-dom";
 import AuthAPI from "../services/authAPI";
-import logo from "../../images/hospital_logo.jpg";
+import logo from "../../images/hospital_logo.png";
 
 
 const NavBar = ({ isAuthenticated, setIsAuthenticated }) => {

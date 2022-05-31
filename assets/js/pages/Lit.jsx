@@ -199,8 +199,8 @@ import {
     return (
         <>
           {alert}
-          <div className="litsArray">
-            <table id="litsTable" className="table table-dark">
+          <div className="HopitalArray">
+            <table id="patientsTable" className="table table-dark">
 
               <thead>
                   <tr>

@@ -66,7 +66,7 @@ import {
   
     return (
         <>
-          <div className="comptesArray">
+          <div className="HopitalArray">
             <table id="comptesTable" className="table table-dark">
 
               <thead>
