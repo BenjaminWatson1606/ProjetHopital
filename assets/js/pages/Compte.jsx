@@ -235,7 +235,7 @@ import {
                     <th>Numero</th>
                     <th>Nom d'utilisateur</th>
                     <th>Mot de passe</th>
-                    <th>Rôles</th>
+                    <th>Rôle</th>
                     <th>Modifier</th>
                   </tr>
               </thead>
@@ -246,7 +246,12 @@ import {
                     <td>{compte.id}</td>
                     <td>{compte.username}</td>
                     <td>{compte.password}</td>
-                    <td>{compte.roles}</td>
+                    {compte.roles.includes('ROLE_ADMIN') &&
+                    <td>Administrateur</td>
+                    }
+                    {!compte.roles.includes('ROLE_ADMIN') &&
+                    <td>Utilisateur</td>
+                    }
                     <td><Button color="success" onClick={() => handleModify(compte)}>Modifier / Supprimer</Button></td> 
                   </tr>))}
               </tbody>
