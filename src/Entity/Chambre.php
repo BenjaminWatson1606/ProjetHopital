@@ -57,7 +57,7 @@ class Chambre
         return $this->Service;
     }
 
-    public function setService(Service $Service): self
+    public function setService(?Service $Service): self
     {
         $this->Service = $Service;
 

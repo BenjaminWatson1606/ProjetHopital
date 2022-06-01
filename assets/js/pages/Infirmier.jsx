@@ -32,18 +32,19 @@ import {
         id: undefined,
         NomInfirmier: undefined,
         PrenomInfirmier: undefined,
-        ServiceInfirmier: undefined
     })
     let [newInfirmier, setNewInfirmier] = useState({
         id: undefined,
         NomInfirmier: undefined,
         PrenomInfirmier: undefined,
-        ServiceInfirmier: undefined
     })
+    let [options, setOptions] = useState([])
+    const [selectedOption, setSelectedOption] = useState(null)
   
 
     useEffect(() => {
-      fetchInfirmiers()
+      fetchInfirmiers(),
+      fetchServices()
     }, [])
 
     const fetchInfirmiers = async () => {
@@ -67,12 +68,33 @@ import {
       }
     };
 
+    const fetchServices = async () => {
+      try {
+        await axios
+          .get("http://localhost:8000/api/services")
+          .then((response) => response.data["hydra:member"].map(Service => (options.push({value: Service.id, label: Service.NomService}))))
+      } catch (error) {
+        if (error.response) {
+          // Request made and server responded
+          console.log(error.response.data);
+          console.log(error.response.status);
+          console.log(error.response.headers);
+        } else if (error.request) {
+          // The request was made but no response was received
+          console.log(error.request);
+        } else {
+          // Something happened in setting up the request that triggered an Error
+          console.log('Error', error.message);
+        }
+      }
+    };
+
     const addInfirmier = () => {
       try {
         axios.post("http://localhost:8000/api/infirmiers", {
           NomInfirmier: newInfirmier.NomInfirmier,
           PrenomInfirmier: newInfirmier.PrenomInfirmier,
-          Service: "/api/services/" + newInfirmier.ServiceInfirmier
+          Service: "/api/services/" + selectedOption.value
         })
         toast.success("Infirmier ajouté")
       } catch (error) {
@@ -98,9 +120,9 @@ import {
       currentInfirmier.NomInfirmier = Infirmier.NomInfirmier
       currentInfirmier.PrenomInfirmier = Infirmier.PrenomInfirmier
       if (Infirmier.Service){
-        currentInfirmier.ServiceInfirmier = Infirmier.Service.id
+        setSelectedOption({label:[Infirmier.Service.NomService], value: [Infirmier.Service.id]})
       } else {
-        currentInfirmier.ServiceInfirmier = undefined
+        setSelectedOption(null)
       }
       setModalChange(true)
     }
@@ -111,7 +133,7 @@ import {
         axios.patch("http://localhost:8000/api/infirmiers/" + currentInfirmier.id, {
           NomInfirmier: currentInfirmier.NomInfirmier,
           PrenomInfirmier: currentInfirmier.PrenomInfirmier,
-          Service: "/api/services/" + currentInfirmier.ServiceInfirmier
+          Service: "/api/services/" + selectedOption.value
         }, 
         {headers} )
         toast.success("Infirmier modifié")
@@ -192,7 +214,7 @@ import {
       currentInfirmier.id= undefined,
       currentInfirmier.NomInfirmier= undefined,
       currentInfirmier.PrenomInfirmier= undefined,
-      currentInfirmier.ServiceInfirmier= undefined
+      setSelectedOption(null)
     }
 
     return (
@@ -210,13 +232,13 @@ import {
                   </tr>
               </thead>
               <tbody>
-                  {console.log(Infirmiers)}
+                  {console.log(options)}
                 {Infirmiers.map(Infirmier => (
                   <tr>
                     <td>{Infirmier.NomInfirmier}</td>
                     <td>{Infirmier.PrenomInfirmier}</td>
                     {Infirmier.Service &&
-                        <td>{Infirmier.Service.id}</td>
+                        <td>{Infirmier.Service.NomService}</td>
                     }
                     {!Infirmier.Service &&
                         <td>/</td>
@@ -266,15 +288,22 @@ import {
                   </FormGroup>
                   <FormGroup>
                     <label className="form-control-label">Service de l'Infirmier</label>
-                    <Input
-                      className="form-control-alternative edit-event--title"
-                      placeholder="Service de l'Infirmier"
-                      type="number"
-                      onChange={e => {
-                        currentInfirmier.ServiceInfirmier = e.target.value
-                      }
-                      }
-                      defaultValue={currentInfirmier.ServiceInfirmier}
+                    <Select
+                      options={options}
+                      onChange={setSelectedOption}
+                      name="ServiceInfirmier"
+                      defaultValue={selectedOption}
+                      value={selectedOption}
+                      theme={(theme) => ({
+                        ...theme,
+                        borderRadius: 0,
+                        colors: {
+                          ...theme.colors,
+                          primary25: '#8dd7cf',
+                          primary: '#c3cfd9'
+
+                        },
+                      })}
                     />
                   </FormGroup>
 
@@ -334,14 +363,22 @@ import {
                   </FormGroup>
                   <FormGroup>
                     <label className="form-control-label">Service de l'Infirmier</label>
-                    <Input
-                      className="form-control-alternative edit-event--title"
-                      placeholder="Service de l'Infirmier"
-                      type="number"
-                      onChange={e => {
-                        newInfirmier.ServiceInfirmier = e.target.value
-                      }
-                      }
+                    <Select
+                      options={options}
+                      onChange={setSelectedOption}
+                      name="ServiceInfirmier"
+                      defaultValue={selectedOption}
+                      value={selectedOption}
+                      theme={(theme) => ({
+                        ...theme,
+                        borderRadius: 0,
+                        colors: {
+                          ...theme.colors,
+                          primary25: '#8dd7cf',
+                          primary: '#c3cfd9'
+
+                        },
+                      })}
                     />
                   </FormGroup>
 

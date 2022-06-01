@@ -28,18 +28,19 @@ import {
     const [modalChange, setModalChange] = useState(false);
     const [modalAdd, setModalAdd] = useState(false);
     let [currentLit, setCurrentLit] = useState({
-      id: undefined,
-      ChambreId: undefined,
-      PatientId: undefined,
-    });
-    let [newLit, setNewLit] = useState({
-      ChambreId: undefined,
-      PatientId: undefined,
+      id: undefined
     });
     let addPatientLit;
+    let addChambreLit;
+    let [optionsPatient, setOptionsPatient] = useState([])
+    const [selectedOptionPatient, setSelectedOptionPatient] = useState({value: "NoPatient", label: "Patient non défini"})
+    let [optionsChambre, setOptionsChambre] = useState([])
+    const [selectedOptionChambre, setSelectedOptionChambre] = useState(null)
 
     useEffect(() => {
-      fetchLits()
+      fetchLits(), 
+      fetchChambres(), 
+      fetchPatients()
     }, [])
 
     const fetchLits = async () => {
@@ -64,15 +65,61 @@ import {
       }
     };
 
+    const fetchChambres = async () => {
+      try {
+        await axios
+          .get("http://localhost:8000/api/chambres")
+          .then((response) => response.data["hydra:member"].map(Chambre => (optionsChambre.push({value: Chambre.id, label: Chambre.id}))))
+      } catch (error) {
+        if (error.response) {
+          // Request made and server responded
+          console.log(error.response.data);
+          console.log(error.response.status);
+          console.log(error.response.headers);
+        } else if (error.request) {
+          // The request was made but no response was received
+          console.log(error.request);
+        } else {
+          // Something happened in setting up the request that triggered an Error
+          console.log('Error', error.message);
+        }
+      }}
+
+      const fetchPatients = async () => {
+        optionsPatient.push({value: "NoPatient", label: "Patient non défini"})
+        try {
+          await axios
+            .get("http://localhost:8000/api/patients?exists[Lit]=false")
+            .then((response) => response.data["hydra:member"].map(Patient => (optionsPatient.push({value: Patient.id, label: Patient.NomPatient + " " + Patient.PrenomPatient}))))
+        } catch (error) {
+          if (error.response) {
+            // Request made and server responded
+            console.log(error.response.data);
+            console.log(error.response.status);
+            console.log(error.response.headers);
+          } else if (error.request) {
+            // The request was made but no response was received
+            console.log(error.request);
+          } else {
+            // Something happened in setting up the request that triggered an Error
+            console.log('Error', error.message);
+          }
+        }}
+
     const addLit = () => {
-      if (newLit.PatientId != "" && newLit.PatientId != null){
-        addPatientLit = "/api/patients/" + newLit.PatientId
-      } else {
+      if (selectedOptionPatient.value == "NoPatient"){
         addPatientLit = null
+      } else {
+        addPatientLit = "/api/patients/" + selectedOptionPatient.value
+      }
+      if (selectedOptionChambre.value == null){
+        addChambreLit = null
+      } else {
+        addChambreLit = "/api/chambres/" + selectedOptionChambre.value
       }
       try {
         axios.post("http://localhost:8000/api/lits", {
-          Chambre: "/api/chambres/" + newLit.ChambreId.toString(),
+          Chambre: addChambreLit,
           Patient: addPatientLit
         })
         toast.success("Lit ajouté")
@@ -96,23 +143,30 @@ import {
 
     const handleModify = (lit) => {
       currentLit.id = lit.id
-      currentLit.ChambreId = lit.Chambre.id
-      if (lit.Patient) {
-        currentLit.PatientId = lit.Patient.id
+      setSelectedOptionChambre({label:[lit.Chambre.id], value: [lit.Chambre.id]})
+      if (lit.Patient){
+        setSelectedOptionPatient({label:[lit.Patient.NomPatient + " " + lit.Patient.PrenomPatient], value: [lit.Patient.id]})
+      } else {
+        setSelectedOptionPatient({value: "NoPatient", label: "Patient non défini"})
       }
       setModalChange(true)
     }
 
     const changeLit = () => {
-      if (currentLit.PatientId != "" && currentLit.PatientId != null){
-        addPatientLit = "/api/patients/" + currentLit.PatientId
-      } else {
+      if (selectedOptionPatient.value == "NoPatient"){
         addPatientLit = null
+      } else {
+        addPatientLit = "/api/patients/" + selectedOptionPatient.value
+      }
+      if (selectedOptionChambre.value == null){
+        addChambreLit = null
+      } else {
+        addChambreLit = "/api/chambres/" + selectedOptionChambre.value
       }
       const headers = { 'Content-Type': 'application/merge-patch+json' }
       try {
         axios.patch("http://localhost:8000/api/lits/" + currentLit.id, {
-          Chambre: "/api/chambres/" + currentLit.ChambreId.toString(),
+          Chambre: addChambreLit,
           Patient: addPatientLit
         }, 
         {headers} )
@@ -192,8 +246,8 @@ import {
       )
       setModalChange(false),
       currentLit.id = undefined
-      currentLit.ChambreId = undefined
-      currentLit.PatientId = undefined
+      setSelectedOptionChambre(null)
+      setSelectedOptionPatient({value: "NoPatient", label: "Patient non défini"})
     }
   
     return (
@@ -220,7 +274,7 @@ import {
                         <td>/</td>
                     }
                     {lit.Patient &&
-                        <td>{lit.Patient.id}</td>
+                        <td>{lit.Patient.NomPatient} {lit.Patient.PrenomPatient}</td>
                     }
                     {lit.Disponibilite == true &&
                         <td>Oui</td>
@@ -239,35 +293,47 @@ import {
           </div>
           <Modal
             isOpen={modalChange}
-            toggle={() => setModalChange(false)}
+            toggle={() => {setModalChange(false), setSelectedOptionPatient({value: "NoPatient", label: "Patient non défini"}), setSelectedOptionChambre(null)}}
             className="modal-dialog-centered modal-secondary"
           >
             <div className="modal-body">
                 <Form className="edit-event--form">
                   <FormGroup>
                     <label className="form-control-label">Chambre associée</label>
-                    <Input
-                      className="form-control-alternative edit-event--title"
-                      placeholder="Chambre associée"
-                      type="number"
-                      onChange={e => {
-                        currentLit.ChambreId = e.target.value
-                      }
-                      }
-                      defaultValue={currentLit.ChambreId}
+                    <Select
+                      options={optionsChambre}
+                      onChange={setSelectedOptionChambre}
+                      name="ChambreLit"
+                      defaultValue={selectedOptionChambre}
+                      value={selectedOptionChambre}
+                      theme={(theme) => ({
+                        ...theme,
+                        borderRadius: 0,
+                        colors: {
+                          ...theme.colors,
+                          primary25: '#8dd7cf',
+                          primary: '#c3cfd9'
+                        },
+                      })}
                     />
                   </FormGroup>
                   <FormGroup>
                     <label className="form-control-label">Patient associé</label>
-                    <Input
-                      className="form-control-alternative edit-event--title"
-                      placeholder="Patient associé"
-                      type="number"
-                      onChange={e => {
-                        currentLit.PatientId = e.target.value
-                      }
-                      }
-                      defaultValue={currentLit.PatientId}
+                    <Select
+                      options={optionsPatient}
+                      onChange={setSelectedOptionPatient}
+                      name="PatientLit"
+                      defaultValue={selectedOptionPatient}
+                      value={selectedOptionPatient}
+                      theme={(theme) => ({
+                        ...theme,
+                        borderRadius: 0,
+                        colors: {
+                          ...theme.colors,
+                          primary25: '#8dd7cf',
+                          primary: '#c3cfd9'
+                        },
+                      })}
                     />
                   </FormGroup>
 
@@ -287,7 +353,7 @@ import {
                 <Button
                   className="ml-auto"
                   color="link"
-                  onClick={() => setModalChange(false)}
+                  onClick={() => {setModalChange(false), setSelectedOptionPatient({value: "NoPatient", label: "Patient non défini"}), setSelectedOptionChambre(null)}}
                 >
                   Close
                 </Button>
@@ -296,33 +362,46 @@ import {
           </Modal>
           <Modal
             isOpen={modalAdd}
-            toggle={() => setModalAdd(false)}
+            toggle={() => {setModalAdd(false), setSelectedOptionPatient({value: "NoPatient", label: "Patient non défini"}), setSelectedOptionChambre(null)}}
             className="modal-dialog-centered modal-secondary"
           >
             <div className="modal-body">
                 <Form className="edit-event--form">
                   <FormGroup>
                     <label className="form-control-label">Chambre associée</label>
-                    <Input
-                      className="form-control-alternative edit-event--title"
-                      placeholder="Chambre associée"
-                      type="number"
-                      onChange={e => {
-                        newLit.ChambreId = e.target.value
-                      }
-                      }
+                    <Select
+                      options={optionsChambre}
+                      onChange={setSelectedOptionChambre}
+                      name="ChambreLit"
+                      defaultValue={selectedOptionChambre}
+                      value={selectedOptionChambre}
+                      theme={(theme) => ({
+                        ...theme,
+                        borderRadius: 0,
+                        colors: {
+                          ...theme.colors,
+                          primary25: '#8dd7cf',
+                          primary: '#c3cfd9'
+                        },
+                      })}
                     />
                   </FormGroup>
                   <FormGroup>
                     <label className="form-control-label">Patient associé</label>
-                    <Input
-                      className="form-control-alternative edit-event--title"
-                      placeholder="Patient associé"
-                      type="number"
-                      onChange={e => {
-                        newLit.PatientId = e.target.value
-                      }
-                      }
+                    <Select
+                      options={optionsPatient}
+                      onChange={setSelectedOptionPatient}
+                      name="PatientLit"
+                      value={selectedOptionPatient}
+                      theme={(theme) => ({
+                        ...theme,
+                        borderRadius: 0,
+                        colors: {
+                          ...theme.colors,
+                          primary25: '#8dd7cf',
+                          primary: '#c3cfd9'
+                        },
+                      })}
                     />
                   </FormGroup>
 
@@ -336,7 +415,7 @@ import {
                 <Button
                   className="ml-auto"
                   color="link"
-                  onClick={() => setModalAdd(false)}
+                  onClick={() => {setModalAdd(false), setSelectedOptionPatient({value: "NoPatient", label: "Patient non défini"}), setSelectedOptionChambre(null)}}
                 >
                   Close
                 </Button>

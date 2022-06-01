@@ -8,6 +8,7 @@ use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
 use Symfony\Component\Serializer\Annotation\Groups;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\ExistsFilter;
 
 /**
  * @ORM\Entity(repositoryClass=PatientRepository::class)
@@ -17,7 +18,7 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
  *  "groups"={"patient_read"}
  * })
  */
-
+#[ApiFilter(ExistsFilter::class, properties: ['Lit'])]
 class Patient
 {
     /**
@@ -36,13 +37,13 @@ class Patient
 
     /**
      * @ORM\Column(type="string", length=200)
-     * @Groups({"patient_read"})
+     * @Groups({"patient_read", "lit_read"})
      */
     private $NomPatient;
 
     /**
      * @ORM\Column(type="string", length=200)
-     * @Groups({"patient_read"})
+     * @Groups({"patient_read", "lit_read"})
      */
     private $PrenomPatient;
 

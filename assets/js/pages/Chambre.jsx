@@ -29,15 +29,14 @@ import {
     const [modalAdd, setModalAdd] = useState(false);
     let [currentChambre, setCurrentChambre] = useState({
       id: undefined,
-      ServiceId: undefined
     });
-    let [newChambre, setNewChambre] = useState({
-      id: undefined,
-      ServiceId: undefined
-    });
+    let [options, setOptions] = useState([])
+    const [selectedOption, setSelectedOption] = useState(null)
+    let addServiceChambre;
 
     useEffect(() => {
-      fetchChambres()
+      fetchChambres(),
+      fetchServices()
     }, [])
 
     const fetchChambres = async () => {
@@ -61,10 +60,37 @@ import {
         }
       }}
 
+      const fetchServices = async () => {
+        options.push({value: "NoService", label: "Service non défini"})
+        try {
+          await axios
+            .get("http://localhost:8000/api/services")
+            .then((response) => response.data["hydra:member"].map(Service => (options.push({value: Service.id, label: Service.NomService}))))
+        } catch (error) {
+          if (error.response) {
+            // Request made and server responded
+            console.log(error.response.data);
+            console.log(error.response.status);
+            console.log(error.response.headers);
+          } else if (error.request) {
+            // The request was made but no response was received
+            console.log(error.request);
+          } else {
+            // Something happened in setting up the request that triggered an Error
+            console.log('Error', error.message);
+          }
+        }
+      };
+
       const addChambre = () => {
+        if (selectedOption.value == "NoService"){
+          addServiceChambre = null
+        } else {
+          addServiceChambre = "/api/services/" + selectedOption.value
+        }
         try {
           axios.post("http://localhost:8000/api/chambres", {
-            Service: "/api/services/" + newChambre.ServiceId.toString(),
+            Service: addServiceChambre,
           })
           toast.success("Chambre ajoutée")
         } catch (error) {
@@ -87,15 +113,24 @@ import {
   
       const handleModify = (chambre) => {
         currentChambre.id = chambre.id
-        currentChambre.ServiceId = chambre.Service.id
+        if (chambre.Service){
+          setSelectedOption({label:[chambre.Service.NomService], value: [chambre.Service.id]})
+        } else {
+          setSelectedOption({value: "NoService", label: "Service non défini"})
+        }
         setModalChange(true)
       }
   
       const changeChambre = () => {
+        if (selectedOption.value == "NoService"){
+          addServiceChambre = null
+        } else {
+          addServiceChambre = "/api/services/" + selectedOption.value
+        }
         const headers = { 'Content-Type': 'application/merge-patch+json' }
         try {
           axios.patch("http://localhost:8000/api/chambres/" + currentChambre.id, {
-            Service: "/api/services/" + currentChambre.ServiceId.toString(),
+            Service: addServiceChambre
           }, 
           {headers} )
           toast.success("Chambre modifiée")
@@ -174,7 +209,7 @@ import {
         )
         setModalChange(false),
         currentChambre.id = undefined
-        currentChambre.ServiceId = undefined
+        setSelectedOption(null);
       }
     
   
@@ -195,7 +230,12 @@ import {
                 {chambres.map(chambre => (
                   <tr>
                     <td>{chambre.id}</td>
-                    <td>{chambre.Service.NomService}</td>
+                    {chambre.Service &&
+                        <td>{chambre.Service.NomService}</td>
+                    }
+                    {!chambre.Service &&
+                        <td>/</td>
+                    }
                     <td><Button color="success" onClick={() => handleModify(chambre)}>Modifier / Supprimer</Button></td> 
                   </tr>))}
               </tbody>
@@ -214,15 +254,22 @@ import {
                 <Form className="edit-event--form">
                   <FormGroup>
                     <label className="form-control-label">Service associé</label>
-                    <Input
-                      className="form-control-alternative edit-event--title"
-                      placeholder="Service associé"
-                      type="number"
-                      onChange={e => {
-                        currentChambre.ServiceId = e.target.value
-                      }
-                      }
-                      defaultValue={currentChambre.ServiceId}
+                    <Select
+                      options={options}
+                      onChange={setSelectedOption}
+                      name="ServiceChambre"
+                      defaultValue={selectedOption}
+                      value={selectedOption}
+                      theme={(theme) => ({
+                        ...theme,
+                        borderRadius: 0,
+                        colors: {
+                          ...theme.colors,
+                          primary25: '#8dd7cf',
+                          primary: '#c3cfd9'
+
+                        },
+                      })}
                     />
                   </FormGroup>
                   <input className="edit-event--id" type="hidden" />
@@ -257,14 +304,22 @@ import {
                 <Form className="edit-event--form">
                   <FormGroup>
                     <label className="form-control-label">Service associé</label>
-                    <Input
-                      className="form-control-alternative edit-event--title"
-                      placeholder="Service associé"
-                      type="number"
-                      onChange={e => {
-                        newChambre.ServiceId = e.target.value
-                      }
-                      }
+                    <Select
+                      options={options}
+                      onChange={setSelectedOption}
+                      name="ServiceChambre"
+                      defaultValue={selectedOption}
+                      value={selectedOption}
+                      theme={(theme) => ({
+                        ...theme,
+                        borderRadius: 0,
+                        colors: {
+                          ...theme.colors,
+                          primary25: '#8dd7cf',
+                          primary: '#c3cfd9'
+
+                        },
+                      })}
                     />
                   </FormGroup>
                   <input className="edit-event--id" type="hidden" />

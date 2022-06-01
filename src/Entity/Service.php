@@ -31,7 +31,7 @@ class Service
 
     /**
      * @ORM\Column(type="string")
-     * @Groups({"service_read", "chambre_read"})
+     * @Groups({"service_read", "chambre_read", "infirmier_read"})
      */
     private $NomService;
 
