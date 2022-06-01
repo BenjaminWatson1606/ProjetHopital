@@ -6,6 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 use App\Repository\ServiceRepository;
 use ApiPlatform\Core\Annotation\ApiFilter;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 use ApiPlatform\Core\Annotation\ApiResource;
 use Symfony\Component\Serializer\Annotation\Groups;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
@@ -24,7 +25,7 @@ class Service
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
-     * @Groups({"service_read", "chambre_read"})
+     * @Groups({"service_read", "chambre_read", "infirmier_read"})
      */
     private $id;
 
@@ -40,13 +41,15 @@ class Service
     private $Chambres;
 
     /**
-     * @ORM\OneToOne(targetEntity=Infirmier::class, inversedBy="Service")
+     * @ORM\OneToMany(targetEntity=Infirmier::class, mappedBy="Service")
+     * @Groups({"service_read"})
      */
-    private $Infirmier;
+    private $Infirmiers;
 
     public function __construct()
     {
         $this->Chambres = new ArrayCollection();
+        $this->Infirmiers = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -78,7 +81,7 @@ class Service
     {
         if (!$this->Chambres->contains($Chambre)) {
             $this->Chambres[] = $Chambre;
-            $Chambre->setChambre($this);
+            $Chambre->setService($this);
         }
 
         return $this;
@@ -88,7 +91,7 @@ class Service
     {
         if ($this->Chambres->removeElement($Chambre)){
             if ($Chambre->getChambre() === $this) {
-                $Chambre->setChambre(null);
+                $Chambre->setService(null);
             }
         }
         
@@ -96,14 +99,32 @@ class Service
         return $this;
     }
 
-    public function getInfirmier(): ?Infirmier
+    /**
+     * @return Collection|Infirmier[]
+     */
+    public function getInfirmiers(): ?Collection
     {
-        return $this->Infirmier;
+        return $this->Infirmiers;
     }
 
-    public function setInfirmier(Infirmier $Infirmier): self
+    public function addInfirmier(Infirmier $Infirmier): self
     {
-        $this->Infirmier = $Infirmier;
+        if (!$this->Infirmiers->contains($Infirmier)) {
+            $this->Infirmiers[] = $Infirmier;
+            $Infirmier->setService($this);
+        }
+
+        return $this;
+    }
+
+    public function removeInfirmier(Infirmier $Infirmier): self
+    {
+        if ($this->Infirmiers->removeElement($Infirmier)){
+            if ($Infirmier->getInfirmier() === $this) {
+                $Infirmier->setService(null);
+            }
+        }
+        
 
         return $this;
     }

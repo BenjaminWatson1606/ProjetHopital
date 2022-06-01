@@ -53,13 +53,6 @@ class Lit
         return $this->id;
     }
 
-    public function setId(int $Id): ?self
-    {
-        $this->id = $Id;
-        
-        return $this;
-    }
-
     public function getDisponibilite(): ?bool
     {
         return $this->Disponibilite;

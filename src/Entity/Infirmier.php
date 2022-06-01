@@ -46,7 +46,8 @@ class Infirmier
     private $Compte;
 
     /**
-     * @ORM\OneToOne(targetEntity=Service::class, mappedBy="Infirmier")
+     * @ORM\ManyToOne(targetEntity=Service::class, inversedBy="Infirmiers")
+     * @Groups({"infirmier_read"})
      */
     private $Service;
 

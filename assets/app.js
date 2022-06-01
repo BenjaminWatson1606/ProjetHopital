@@ -26,11 +26,8 @@ import Patient from "./js/pages/Patient";
 import Lit from "./js/pages/Lit";
 import Chambre from "./js/pages/Chambre";
 import Service from "./js/pages/Service";
+import Infirmier from "./js/pages/Infirmier";
 import Compte from "./js/pages/Compte";
-import ManagerTimeManagement from "./js/pages/crew/ManagerTimeManagement";
-import CollaboratorTimeManagement from "./js/pages/crew/CollaboratorTimeManagement";
-import ManagerActivityReport from "./js/pages/crew/ManagerActivityReport";
-import CollaboratorActivityReport from "./js/pages/crew/CollaboratorActivityReport";
 
 const token = window.localStorage.getItem("authToken");
 const { roles: roles } = jwtDecode(token);
@@ -44,26 +41,18 @@ const PrivateRoute = ({ path, isAuthenticated, component }) =>
     <Redirect to="/login" />
   );
 
-let timeManagementComponent = <></>
-let activityReportComponent = <></>
-if (roles) {
-  if (roles.find(role => role == "ROLE_MANAGER")) {
-    timeManagementComponent = <RoleBasedRouting exact path="/timeManagement" component={ManagerTimeManagement} roles={'ROLE_MANAGER'} />
-  } else if (roles.find(role => role == "ROLE_COLLABORATOR")) {
-    timeManagementComponent = <RoleBasedRouting exact path="/timeManagement" component={CollaboratorTimeManagement} roles={'ROLE_COLLABORATOR'} />
-  }
-
-  if (roles.find(role => role == "ROLE_MANAGER")) {
-    activityReportComponent = <RoleBasedRouting exact path="/activityReport" component={ManagerActivityReport} roles={'ROLE_MANAGER'} />
-  } else if (roles.find(role => role == "ROLE_COLLABORATOR")) {
-    activityReportComponent = <RoleBasedRouting exact path="/activityReport" component={CollaboratorActivityReport} roles={'ROLE_COLLABORATOR'} />
-  }
-}
-
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(
     AuthAPI.isAuthenticated()
   );
+  let CompteComponent = <></>
+  if (roles) {
+    if (roles.find(role => role == "ROLE_ADMIN")) {
+      CompteComponent = <PrivateRoute path="/compte" isAuthenticated={isAuthenticated} component={Compte}/>
+    } else {
+      CompteComponent = <PrivateRoute path="/compte" isAuthenticated={isAuthenticated} component={HomePage}/>
+    }
+  }
   return (
     <>
       <HashRouter>
@@ -111,10 +100,12 @@ const App = () => {
               />
 
               <PrivateRoute
-                path="/compte"
+                path="/infirmier"
                 isAuthenticated={isAuthenticated}
-                component={Compte}
+                component={Infirmier}
               />
+
+              {CompteComponent}
 
 
               <Route

@@ -2,15 +2,18 @@ import React, { useState, useEffect } from "react";
 import { NavLink } from "react-router-dom";
 import AuthAPI from "../services/authAPI";
 import logo from "../../images/hospital_logo.png";
+import jwtDecode from "jwt-decode";
 
 
 const NavBar = ({ isAuthenticated, setIsAuthenticated }) => {
   const [toggleMenu, setToggleMenu] = useState(false);
   const [largeur, setLargeur] = useState(window.innerWidth);
+  let CompteNavbar;
   const toggleNavSmallScreen = () => {
     setToggleMenu(!toggleMenu);
   };
-
+  const token = window.localStorage.getItem("authToken");
+  const { roles: roles } = jwtDecode(token);
   useEffect(() => {
     const changeWidth = () => {
       setLargeur(window.innerWidth);
@@ -32,6 +35,14 @@ const NavBar = ({ isAuthenticated, setIsAuthenticated }) => {
     setIsAuthenticated(false);
   };
 
+  if (roles) {
+    if (roles.find(role => role == "ROLE_ADMIN")) {
+      CompteNavbar = <a href="/#/compte" className="nav_link"> <i className='bx bx-user nav_icon'></i> <span className="nav_name">Comptes</span></a>
+    } else {
+      CompteNavbar = null
+    }
+  }
+
   return (
       <div id="body-pd">
           <header className="header" id="header">
@@ -52,7 +63,8 @@ const NavBar = ({ isAuthenticated, setIsAuthenticated }) => {
                           <a href="/#/lit" className="nav_link"> <i className='bx bx-user nav_icon'></i> <span className="nav_name">Lit</span> </a> 
                           <a href="/#/chambre"className="nav_link"> <i className='bx bx-message-square-detail nav_icon'></i> <span className="nav_name">Chambre</span> </a> 
                           <a href="/#/service" className="nav_link"> <i className='bx bx-bookmark nav_icon'></i> <span className="nav_name">Service</span> </a> 
-                          <a href="/#/compte" className="nav_link"> <i className='bx bx-user nav_icon'></i> <span className="nav_name">Comptes</span></a>
+                          <a href="/#/infirmier" className="nav_link"> <i className='bx bx-user nav_icon'></i> <span className="nav_name">Infirmiers</span></a>
+                          {CompteNavbar}
                       </div>
                     
                   </div> 

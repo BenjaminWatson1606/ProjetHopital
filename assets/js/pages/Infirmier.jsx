@@ -2,9 +2,10 @@ import React, { useState, useEffect, useRef } from 'react';
 import AuthAPI from "../services/authAPI";
 import { useTranslation } from "react-i18next";
 import axios from "axios";
+import Moment from "moment";
 import { toast } from "react-toastify";
-import ReactBSAlert from "react-bootstrap-sweetalert";
 import Select from 'react-select';
+import ReactBSAlert from "react-bootstrap-sweetalert";
 import "sweetalert2/dist/sweetalert2.min.css";
 import {
     Button,
@@ -20,34 +21,36 @@ import {
     Col
   } from "reactstrap";
 
-  const Lit = (props) => {
+  const Infirmier = (props) => {
     
     const { t } = useTranslation();
-    const [lits, setLits] = useState([]);
-    const [alert, setAlert] = useState();
-    const [modalChange, setModalChange] = useState(false);
-    const [modalAdd, setModalAdd] = useState(false);
-    let [currentLit, setCurrentLit] = useState({
-      id: undefined,
-      ChambreId: undefined,
-      PatientId: undefined,
-    });
-    let [newLit, setNewLit] = useState({
-      ChambreId: undefined,
-      PatientId: undefined,
-    });
-    let addPatientLit;
+    const [Infirmiers, setInfirmiers] = useState([]);
+    const [alert, setAlert] = useState()
+    const [modalChange, setModalChange] = useState(false)
+    const [modalAdd, setModalAdd] = useState(false)
+    let [currentInfirmier, setCurrentInfirmier] = useState({
+        id: undefined,
+        NomInfirmier: undefined,
+        PrenomInfirmier: undefined,
+        ServiceInfirmier: undefined
+    })
+    let [newInfirmier, setNewInfirmier] = useState({
+        id: undefined,
+        NomInfirmier: undefined,
+        PrenomInfirmier: undefined,
+        ServiceInfirmier: undefined
+    })
+  
 
     useEffect(() => {
-      fetchLits()
+      fetchInfirmiers()
     }, [])
 
-    const fetchLits = async () => {
-  
+    const fetchInfirmiers = async () => {
       try {
         await axios
-          .get("http://localhost:8000/api/lits")
-          .then((response) => setLits(response.data["hydra:member"]))
+          .get("http://localhost:8000/api/infirmiers")
+          .then((response) => setInfirmiers(response.data["hydra:member"]))
       } catch (error) {
         if (error.response) {
           // Request made and server responded
@@ -64,18 +67,14 @@ import {
       }
     };
 
-    const addLit = () => {
-      if (newLit.PatientId != "" && newLit.PatientId != null){
-        addPatientLit = "/api/patients/" + newLit.PatientId
-      } else {
-        addPatientLit = null
-      }
+    const addInfirmier = () => {
       try {
-        axios.post("http://localhost:8000/api/lits", {
-          Chambre: "/api/chambres/" + newLit.ChambreId.toString(),
-          Patient: addPatientLit
+        axios.post("http://localhost:8000/api/infirmiers", {
+          NomInfirmier: newInfirmier.NomInfirmier,
+          PrenomInfirmier: newInfirmier.PrenomInfirmier,
+          Service: "/api/services/" + newInfirmier.ServiceInfirmier
         })
-        toast.success("Lit ajouté")
+        toast.success("Infirmier ajouté")
       } catch (error) {
         if (error.response) {
           // Request made and server responded
@@ -94,29 +93,28 @@ import {
 
     }
 
-    const handleModify = (lit) => {
-      currentLit.id = lit.id
-      currentLit.ChambreId = lit.Chambre.id
-      if (lit.Patient) {
-        currentLit.PatientId = lit.Patient.id
+    const handleModify = (Infirmier) => {
+      currentInfirmier.id = Infirmier.id
+      currentInfirmier.NomInfirmier = Infirmier.NomInfirmier
+      currentInfirmier.PrenomInfirmier = Infirmier.PrenomInfirmier
+      if (Infirmier.Service){
+        currentInfirmier.ServiceInfirmier = Infirmier.Service.id
+      } else {
+        currentInfirmier.ServiceInfirmier = undefined
       }
       setModalChange(true)
     }
 
-    const changeLit = () => {
-      if (currentLit.PatientId != "" && currentLit.PatientId != null){
-        addPatientLit = "/api/patients/" + currentLit.PatientId
-      } else {
-        addPatientLit = null
-      }
+    const changeInfirmier = () => {
       const headers = { 'Content-Type': 'application/merge-patch+json' }
       try {
-        axios.patch("http://localhost:8000/api/lits/" + currentLit.id, {
-          Chambre: "/api/chambres/" + currentLit.ChambreId.toString(),
-          Patient: addPatientLit
+        axios.patch("http://localhost:8000/api/infirmiers/" + currentInfirmier.id, {
+          NomInfirmier: currentInfirmier.NomInfirmier,
+          PrenomInfirmier: currentInfirmier.PrenomInfirmier,
+          Service: "/api/services/" + currentInfirmier.ServiceInfirmier
         }, 
         {headers} )
-        toast.success("Lit modifié")
+        toast.success("Infirmier modifié")
       } catch (error) {
         if (error.response) {
           // Request made and server responded
@@ -135,13 +133,13 @@ import {
 
     }
 
-    const deleteLitSweetAlert = () => {
+    const deleteInfirmierSweetAlert = () => {
       setAlert(
         <ReactBSAlert
           warning
           style={{ display: "block", marginTop: "0px" }}
           title="Are you sure?"
-          onConfirm={deleteLit}
+          onConfirm={deleteInfirmier}
           onCancel={() =>
             setAlert(null)
           }
@@ -157,11 +155,11 @@ import {
       )
     };
 
-    const deleteLit = () => {
+    const deleteInfirmier = () => {
 
       try {
-        axios.delete("http://localhost:8000/api/lits/" + currentLit.id)
-        toast.success(t("deletedEvent"))
+        axios.delete("http://localhost:8000/api/infirmiers/" + currentInfirmier.id)
+        toast.success("Infirmier supprimé")
       } catch (error) {
         if (error.response) {
           // Request made and server responded
@@ -187,48 +185,44 @@ import {
           confirmBtnText="Ok"
           btnSize=""
         >
-          Lit supprimé !
+          Infirmier supprimé !
         </ReactBSAlert>
       )
       setModalChange(false),
-      currentLit.id = undefined
-      currentLit.ChambreId = undefined
-      currentLit.PatientId = undefined
+      currentInfirmier.id= undefined,
+      currentInfirmier.NomInfirmier= undefined,
+      currentInfirmier.PrenomInfirmier= undefined,
+      currentInfirmier.ServiceInfirmier= undefined
     }
-  
+
     return (
         <>
           {alert}
           <div className="HopitalArray">
-            <table id="patientsTable" className="table table-dark">
+            <table id="InfirmiersTable" className="table table-dark">
 
               <thead>
                   <tr>
-                    <th>Numero</th>
-                    <th>Chambre</th>
-                    <th>Patient</th>
-                    <th>Disponibilité</th>
+                    <th>Nom</th>
+                    <th>Prenom</th>
+                    <th>Service</th>
                     <th>Modifier</th>
                   </tr>
               </thead>
               <tbody>
-                {lits.map(lit => (
+                  {console.log(Infirmiers)}
+                {Infirmiers.map(Infirmier => (
                   <tr>
-                    <td>{lit.id}</td>
-                    <td>{lit.Chambre.id}</td>
-                    {!lit.Patient &&
+                    <td>{Infirmier.NomInfirmier}</td>
+                    <td>{Infirmier.PrenomInfirmier}</td>
+                    {Infirmier.Service &&
+                        <td>{Infirmier.Service.id}</td>
+                    }
+                    {!Infirmier.Service &&
                         <td>/</td>
                     }
-                    {lit.Patient &&
-                        <td>{lit.Patient.id}</td>
-                    }
-                    {lit.Disponibilite == true &&
-                        <td>Oui</td>
-                    }
-                    {lit.Disponibilite == false &&
-                        <td>Non</td>
-                    }
-                    <td><Button color="success" onClick={() => handleModify(lit)}>Modifier / Supprimer</Button></td> 
+                    <td><Button color="success" onClick={() => handleModify(Infirmier)}>Modifier / Supprimer</Button></td> 
+
                   </tr>))}
               </tbody>
 
@@ -245,29 +239,42 @@ import {
             <div className="modal-body">
                 <Form className="edit-event--form">
                   <FormGroup>
-                    <label className="form-control-label">Chambre associée</label>
+                    <label className="form-control-label">Nom de l'Infirmier</label>
                     <Input
                       className="form-control-alternative edit-event--title"
-                      placeholder="Chambre associée"
-                      type="number"
+                      placeholder="Nom de l'Infirmier"
+                      type="text"
                       onChange={e => {
-                        currentLit.ChambreId = e.target.value
+                        currentInfirmier.NomInfirmier = e.target.value
                       }
                       }
-                      defaultValue={currentLit.ChambreId}
+                      defaultValue={currentInfirmier.NomInfirmier}
                     />
                   </FormGroup>
                   <FormGroup>
-                    <label className="form-control-label">Patient associé</label>
+                    <label className="form-control-label">Prénom de l'Infirmier</label>
                     <Input
                       className="form-control-alternative edit-event--title"
-                      placeholder="Patient associé"
+                      placeholder="Prénom de l'Infirmier"
+                      type="text"
+                      onChange={e => {
+                        currentInfirmier.PrenomInfirmier = e.target.value
+                      }
+                      }
+                      defaultValue={currentInfirmier.PrenomInfirmier}
+                    />
+                  </FormGroup>
+                  <FormGroup>
+                    <label className="form-control-label">Service de l'Infirmier</label>
+                    <Input
+                      className="form-control-alternative edit-event--title"
+                      placeholder="Service de l'Infirmier"
                       type="number"
                       onChange={e => {
-                        currentLit.PatientId = e.target.value
+                        currentInfirmier.ServiceInfirmier = e.target.value
                       }
                       }
-                      defaultValue={currentLit.PatientId}
+                      defaultValue={currentInfirmier.ServiceInfirmier}
                     />
                   </FormGroup>
 
@@ -275,12 +282,12 @@ import {
                 </Form>
               </div>
               <div className="modal-footer">
-                <Button color="primary" onClick={changeLit} >
+                <Button color="primary" onClick={changeInfirmier} >
                   Modifier
                 </Button>
                 <Button
                   color="danger"
-                  onClick={deleteLitSweetAlert}
+                  onClick={deleteInfirmierSweetAlert}
                 > 
                   Supprimer
                 </Button> 
@@ -301,26 +308,38 @@ import {
           >
             <div className="modal-body">
                 <Form className="edit-event--form">
-                  <FormGroup>
-                    <label className="form-control-label">Chambre associée</label>
+                <FormGroup>
+                    <label className="form-control-label">Nom de l'Infirmier</label>
                     <Input
                       className="form-control-alternative edit-event--title"
-                      placeholder="Chambre associée"
-                      type="number"
+                      placeholder="Nom de l'Infirmier"
+                      type="text"
                       onChange={e => {
-                        newLit.ChambreId = e.target.value
+                        newInfirmier.NomInfirmier = e.target.value
                       }
                       }
                     />
                   </FormGroup>
                   <FormGroup>
-                    <label className="form-control-label">Patient associé</label>
+                    <label className="form-control-label">Prénom de l'Infirmier</label>
                     <Input
                       className="form-control-alternative edit-event--title"
-                      placeholder="Patient associé"
+                      placeholder="Prénom de l'Infirmier"
+                      type="text"
+                      onChange={e => {
+                        newInfirmier.PrenomInfirmier = e.target.value
+                      }
+                      }
+                    />
+                  </FormGroup>
+                  <FormGroup>
+                    <label className="form-control-label">Service de l'Infirmier</label>
+                    <Input
+                      className="form-control-alternative edit-event--title"
+                      placeholder="Service de l'Infirmier"
                       type="number"
                       onChange={e => {
-                        newLit.PatientId = e.target.value
+                        newInfirmier.ServiceInfirmier = e.target.value
                       }
                       }
                     />
@@ -330,7 +349,7 @@ import {
                 </Form>
               </div>
               <div className="modal-footer">
-                <Button color="primary" onClick={addLit} >
+                <Button color="primary" onClick={addInfirmier} >
                   Ajouter
                 </Button>
                 <Button
@@ -348,4 +367,4 @@ import {
 
   }
 
-export default Lit;
+export default Infirmier;

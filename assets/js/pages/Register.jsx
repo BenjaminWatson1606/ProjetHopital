@@ -60,7 +60,8 @@ export default function Register() {
       try {
         await axios.post("http://localhost:8000/api/comptes", {
           username: user.Username,
-          password: user.Password
+          password: user.Password,
+          roles: ['ROLE_INFIRMIER']
         });
         toast.success(t("addedUser"))
       } catch (error) {
