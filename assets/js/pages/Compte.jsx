@@ -287,10 +287,7 @@ import {
                       className="form-control-alternative edit-event--title"
                       placeholder="Mot de passe"
                       type="password"
-                      onChange={e => {
-                        currentCompte.password = e.target.value
-                      }
-                      }
+                      value={currentCompte.password}
                       defaultValue={currentCompte.password}
                     />
                   </FormGroup>
