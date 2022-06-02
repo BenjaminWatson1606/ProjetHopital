@@ -60,6 +60,11 @@ class Compte implements UserInterface
      */
     private $Secretaire;
 
+    /**
+     * @ORM\OneToOne(targetEntity=Medecin::class, inversedBy="Compte")
+     */
+    private $Medecin;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -149,6 +154,18 @@ class Compte implements UserInterface
     public function setSecretaire(Secretaire $Secretaire): self
     {
         $this->Secretaire = $Secretaire;
+
+        return $this;
+    }
+
+    public function getMedecin(): ?Medecin
+    {
+        return $this->Medecin;
+    }
+
+    public function setMedecin(Medecin $Medecin): self
+    {
+        $this->Medecin = $Medecin;
 
         return $this;
     }
