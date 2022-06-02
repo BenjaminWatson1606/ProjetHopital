@@ -8,6 +8,9 @@ use App\Entity\Chambre;
 use App\Entity\Lit;
 use App\Entity\Compte;
 use App\Entity\Patient;
+use App\Entity\Secretaire;
+use App\Entity\Medecin;
+use App\Entity\Vaccin;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Faker\Factory;
@@ -169,7 +172,7 @@ class AppFixtures extends Fixture
             $vaccin->setTypeVaccin($vaccinNoms[$i])
                     ->setReserve($faker->numberBetween($min = 10, $max=200));
         }
-        
+
         $manager->flush();
     }
 }
