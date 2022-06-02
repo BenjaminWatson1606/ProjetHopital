@@ -8,6 +8,7 @@ use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
 use Symfony\Component\Serializer\Annotation\Groups;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\ExistsFilter;
 
 
 /**
@@ -18,25 +19,26 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
  *  "groups"={"infirmier_read"}
  * })
  */
+#[ApiFilter(ExistsFilter::class, properties: ['Compte'])]
 class Infirmier
 {
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
-     * @Groups({"infirmier_read"})
+     * @Groups({"infirmier_read", "compte_read"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=200)
-     * @Groups({"infirmier_read"})
+     * @Groups({"infirmier_read", "compte_read"})
      */
     private $NomInfirmier;
 
     /**
      * @ORM\Column(type="string", length=200)
-     * @Groups({"infirmier_read"})
+     * @Groups({"infirmier_read", "compte_read"})
      */
     private $PrenomInfirmier;
 

@@ -9,6 +9,8 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Security\Core\User\UserInterface;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\ExistsFilter;
 
 
 /**
@@ -49,6 +51,7 @@ class Compte implements UserInterface
 
     /**
      * @ORM\OneToOne(targetEntity=Infirmier::class, inversedBy="Compte")
+     * @Groups({"compte_read"})
      */
     private $Infirmier;
 

@@ -43,9 +43,12 @@ import {
       password: undefined,
       roles: undefined,
     })
+    let [options, setOptions] = useState([])
+    const [selectedOption, setSelectedOption] = useState(null)
 
     useEffect(() => {
-      fetchComptes()
+      fetchComptes(),
+      fetchInfirmiers()
     }, [])
 
     const fetchComptes = async () => {
@@ -70,17 +73,11 @@ import {
       }
     };
 
-    const addCompte = () => {
-      if (newCompte.administrateur == true) {
-        newCompte.roles = ["ROLE_ADMIN"]
-      }
+    const fetchInfirmiers = async () => {
       try {
-        axios.post("http://localhost:8000/api/comptes", {
-          username: newCompte.username,
-          password: newCompte.password,
-          roles: newCompte.roles
-        })
-        toast.success("Compte ajouté")
+        await axios
+          .get("http://localhost:8000/api/infirmiers?exists[Compte]=false")
+          .then((response) => response.data["hydra:member"].map(Infirmier => (options.push({value: Infirmier.id, label: Infirmier.NomInfirmier + " " + Infirmier.PrenomInfirmier}))))
       } catch (error) {
         if (error.response) {
           // Request made and server responded
@@ -94,9 +91,40 @@ import {
           // Something happened in setting up the request that triggered an Error
           console.log('Error', error.message);
         }
-        toast.error(t("errorOccured"))
       }
+    };
 
+    const addCompte = () => {
+      if (selectedOption.value == null) {
+        toast.error('Infirmier non renseigné')
+      } else {
+        if (newCompte.administrateur == true) {
+          newCompte.roles = ["ROLE_ADMIN"]
+        }
+        try {
+          axios.post("http://localhost:8000/api/comptes", {
+            username: newCompte.username,
+            password: newCompte.password,
+            roles: newCompte.roles,
+            Infirmier: "/api/infirmiers/" + selectedOption.value
+          })
+          toast.success("Compte ajouté")
+        } catch (error) {
+          if (error.response) {
+            // Request made and server responded
+            console.log(error.response.data);
+            console.log(error.response.status);
+            console.log(error.response.headers);
+          } else if (error.request) {
+            // The request was made but no response was received
+            console.log(error.request);
+          } else {
+            // Something happened in setting up the request that triggered an Error
+            console.log('Error', error.message);
+          }
+          toast.error(t("errorOccured"))
+        }
+      }
     }
 
     const handleModify = (compte) => {
@@ -104,16 +132,8 @@ import {
       currentCompte.username = compte.username
       currentCompte.password = compte.password
       currentCompte.roles = compte.roles
-      if (compte.Infirmier){
-        currentCompte.Infirmier = compte.Infirmier.id
-      } else {
-        currentCompte.Infirmier = undefined
-      }
-      if (compte.Secretaire){
-        currentCompte.Secretaire = compte.Secretaire.id
-      } else {
-        currentCompte.Secretaire = undefined
-      }
+      setSelectedOption({label:[compte.Infirmier.NomInfirmier + " " + compte.Infirmier.PrenomInfirmier], value: [compte.Infirmier.id]})
+  
       if (compte.roles.includes('ROLE_ADMIN')) {
         currentCompte.administrateur = true
       } else {
@@ -123,39 +143,44 @@ import {
     }
 
     const changeCompte = () => {
-      const headers = { 'Content-Type': 'application/merge-patch+json' }
-      if (currentCompte.administrateur == true && !currentCompte.roles.includes('ROLE_ADMIN')) {
-        currentCompte.roles = [...currentCompte.roles, "ROLE_ADMIN"]
-      } else if (currentCompte.administrateur == false) {
-      for( var i = 0; i < currentCompte.roles.length; i++){ 
-                                   
-        if ( currentCompte.roles[i] === "ROLE_ADMIN") { 
-          currentCompte.roles.splice(i, 1); 
+      if (selectedOption.value == null) {
+        toast.error('Infirmier non renseigné')
+      } else {
+        const headers = { 'Content-Type': 'application/merge-patch+json' }
+        if (currentCompte.administrateur == true && !currentCompte.roles.includes('ROLE_ADMIN')) {
+          currentCompte.roles = [...currentCompte.roles, "ROLE_ADMIN"]
+        } else if (currentCompte.administrateur == false) {
+        for( var i = 0; i < currentCompte.roles.length; i++){ 
+                                    
+          if ( currentCompte.roles[i] === "ROLE_ADMIN") { 
+            currentCompte.roles.splice(i, 1); 
+          }
         }
-      }
-      }
-      try {
-        axios.patch("http://localhost:8000/api/comptes/" + currentCompte.id, {
-          username: currentCompte.username,
-          password: currentCompte.password,
-          roles: currentCompte.roles
-        }, 
-        {headers} )
-        toast.success("Compte modifié")
-      } catch (error) {
-        if (error.response) {
-          // Request made and server responded
-          console.log(error.response.data);
-          console.log(error.response.status);
-          console.log(error.response.headers);
-        } else if (error.request) {
-          // The request was made but no response was received
-          console.log(error.request);
-        } else {
-          // Something happened in setting up the request that triggered an Error
-          console.log('Error', error.message);
         }
-        toast.error(t("errorOccured"))
+        try {
+          axios.patch("http://localhost:8000/api/comptes/" + currentCompte.id, {
+            username: currentCompte.username,
+            password: currentCompte.password,
+            roles: currentCompte.roles,
+            Infirmier: "/api/infirmiers/" + selectedOption.value
+          }, 
+          {headers} )
+          toast.success("Compte modifié")
+        } catch (error) {
+          if (error.response) {
+            // Request made and server responded
+            console.log(error.response.data);
+            console.log(error.response.status);
+            console.log(error.response.headers);
+          } else if (error.request) {
+            // The request was made but no response was received
+            console.log(error.request);
+          } else {
+            // Something happened in setting up the request that triggered an Error
+            console.log('Error', error.message);
+          }
+          toast.error(t("errorOccured"))
+        }
       }
 
     }
@@ -220,8 +245,7 @@ import {
       currentCompte.username= undefined,
       currentCompte.password= undefined,
       currentCompte.roles= undefined,
-      currentCompte.Infirmier= undefined,
-      currentCompte.Secretaire= undefined
+      setSelectedOption(null)
     }
   
     return (
@@ -236,11 +260,11 @@ import {
                     <th>Nom d'utilisateur</th>
                     <th>Mot de passe</th>
                     <th>Rôle</th>
+                    <th>Infirmier associé</th>
                     <th>Modifier</th>
                   </tr>
               </thead>
               <tbody>
-                {console.log(comptes)}
                 {comptes.map(compte => (
                   <tr>
                     <td>{compte.id}</td>
@@ -251,6 +275,12 @@ import {
                     }
                     {!compte.roles.includes('ROLE_ADMIN') &&
                     <td>Utilisateur</td>
+                    }
+                    {compte.Infirmier &&
+                      <td>{compte.Infirmier.NomInfirmier} {compte.Infirmier.PrenomInfirmier}</td>
+                    }
+                    {!compte.Infirmier &&
+                      <td>/</td>
                     }
                     <td><Button color="success" onClick={() => handleModify(compte)}>Modifier / Supprimer</Button></td> 
                   </tr>))}
@@ -292,11 +322,31 @@ import {
                     />
                   </FormGroup>
                   <FormGroup>
-                    <label className="form-control-label">Administrateur</label>
+                    <label className="form-control-label">Infirmier associé</label>
+                    <Select
+                      options={options}
+                      onChange={setSelectedOption}
+                      name="InfirmierCompte"
+                      defaultValue={selectedOption}
+                      value={selectedOption}
+                      theme={(theme) => ({
+                        ...theme,
+                        borderRadius: 0,
+                        colors: {
+                          ...theme.colors,
+                          primary25: '#8dd7cf',
+                          primary: '#c3cfd9'
+                        },
+                      })}
+                    />
+                  </FormGroup>
+                  <FormGroup>
+                    <label className="form-control-label">Administrateur :</label>
                     <Input
                       className="form-control-alternative edit-event--title"
                       placeholder="Administrateur"
                       type="checkbox"
+                      style={{ marginLeft: "10px", border: "1px solid #000"}}
                       defaultChecked={currentCompte.administrateur}
                       onChange={e => {
                         currentCompte.administrateur = e.target.checked
@@ -357,6 +407,25 @@ import {
                         newCompte.password = e.target.value
                       }
                       }
+                    />
+                  </FormGroup>
+                  <FormGroup>
+                    <label className="form-control-label">Infirmier associé</label>
+                    <Select
+                      options={options}
+                      onChange={setSelectedOption}
+                      name="InfirmierCompte"
+                      defaultValue={selectedOption}
+                      value={selectedOption}
+                      theme={(theme) => ({
+                        ...theme,
+                        borderRadius: 0,
+                        colors: {
+                          ...theme.colors,
+                          primary25: '#8dd7cf',
+                          primary: '#c3cfd9'
+                        },
+                      })}
                     />
                   </FormGroup>
                   <FormGroup>
