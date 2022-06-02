@@ -171,6 +171,8 @@ class AppFixtures extends Fixture
 
             $vaccin->setTypeVaccin($vaccinNoms[$i])
                     ->setReserve($faker->numberBetween($min = 10, $max=200));
+
+            $manager->persist($vaccin);
         }
 
         $manager->flush();
