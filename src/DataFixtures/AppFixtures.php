@@ -34,24 +34,9 @@ class AppFixtures extends Fixture
 
             $infirmier = new Infirmier();
 
-            $infirmier->setNomInfirmier($faker->firstName)
-                ->setPrenomInfirmier($faker->lastName)
+            $infirmier->setNomInfirmier($faker->lastName)
+                ->setPrenomInfirmier($faker->firstName)
                 ->setService($service);
-                // ->setPhone($faker->phoneNumber)
-                // ->setEmail($faker->email)
-                // ->setStatus($faker->randomElement(['Etudiant', 'Employé']))
-                // ->setAddress($faker->address)
-                // ->setLinkedin("https://www.linkedin.com/in/" . $profil->getFirstname() . "-" . $profil->getLastname())
-                // ->setViadeo('https://viadeo.journaldunet.com/p/' . $profil->getFirstname() . "-" . $profil->getLastname())
-                // ->setBiography($faker->realText())
-                // ->setIsSearching($faker->boolean())
-                // ->setIsExecutive($faker->boolean())
-                // ->setIsHandicap($faker->boolean())
-                // ->setIsWorkingVisa($faker->boolean())
-                // ->setIsWorkingVisaOK($faker->boolean())
-                // ->setTJM($faker->numberBetween($min = 8, $max = 12))
-                // ->setActualRemuneration($faker->numberBetween($min = 1200, $max = 1600))
-                // ->setRemunerationWanted($faker->numberBetween($min = 1700, $max = 2000));
             $manager->persist($infirmier);
 
             // Creation des comptes
