@@ -48,13 +48,13 @@ class Patient
     private $PrenomPatient;
 
     /**
-     * @ORM\Column(type="date")
+     * @ORM\Column(type="datetime")
      * @Groups({"patient_read"})
      */
     private $DateArrivee;
 
     /**
-     * @ORM\Column(type="date")
+     * @ORM\Column(type="datetime")
      * @Groups({"patient_read"})
      */
     private $DateDepart;
