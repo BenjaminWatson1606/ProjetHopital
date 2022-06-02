@@ -2,13 +2,12 @@
 
 namespace App\DataFixtures;
 
-use App\Entity\Experience;
-use App\Entity\Formation;
-use App\Entity\Interview;
-use App\Entity\Profil;
-use App\Entity\Recruitment;
-use App\Entity\SkillAssignation;
-use App\Entity\Skills;
+use App\Entity\Infirmier;
+use App\Entity\Service;
+use App\Entity\Chambre;
+use App\Entity\Lit;
+use App\Entity\Compte;
+use App\Entity\Patient;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Faker\Factory;
@@ -20,196 +19,115 @@ class AppFixtures extends Fixture
     {
         $faker = Factory::create('fr_FR');
 
-        $listSkills = [
-            ['Langue', 'Anglais'],
-            ['Langue', 'Italien'],
-            ['Langue', 'Français'],
-            ['Langue', 'Allemand'],
-            ['Langue', 'Mandarin'],
-            ['Langue', 'Arabe'],
-            ['Langue', 'Russe'],
-            ['Langue', 'Hindi'],
-            ['Langue', 'Portugais'],
-            ['Langue', 'Japonais'],
-            ['Langue', 'Indonésien'],
-            ['Langue', 'Bengali'],
-            ['Langue', 'Espagnol'],
+        $serviceNoms = ['Chirurgie', 'Radiologie', 'Neurologie', 'Pneumologie', 'Cardiologie', 'Pédiatrie', 'Urologie', 'Maternité', 'Grands brûlés', 'Hématologie'];
 
-
-            ['Informatique', 'Php'],
-            ['Informatique', 'Symfony'],
-            ['Informatique', 'Java'],
-            ['Informatique', 'Python'],
-            ['Informatique', 'Wordpress'],
-            ['Informatique', 'Base de données'],
-            ['Informatique', 'Api'],
-            ['Informatique', 'Cybersécurité'],
-            ['Informatique', 'Algorithme'],
-            ['Informatique', 'Intelligence artificielle'],
-            ['Informatique', 'Big Data'],
-            ['Informatique', 'Swift'],
-            ['Informatique', 'Javascript'],
-            ['Informatique', 'Laravel'],
-            ['Informatique', 'Angular'],
-            ['Informatique', 'Bootstrap'],
-            ['Informatique', 'Html'],
-            ['Informatique', 'Css'],
-            ['Informatique', 'DevOps'],
-            ['Informatique', 'Cryptomonnaies'],
-            ['Informatique', 'Robotique'],
-            ['Informatique', 'Machine Learning'],
-            ['Informatique', 'Cloud'],
-            ['Informatique', 'Linux'],
-            ['Informatique', 'Ux'],
-
-            ['Autre', 'Immobilier'],
-
-            ['Communication', 'Marketing'],
-            ['Communication', 'SEO'],
-
-            ['Management', 'Gestion de projet'],
-            ['Management', 'Gestion d\'équipe'],
-            ['Management', 'Communication'],
-
-            ['Bureautique', 'Microsoft Office'],
-
-            ['Digital', 'E-commerce'],
-            ['Digital', 'Réseaux sociaux'],
-            ['Digital', 'Stratégie numerique'],
-        ];
-
-        $listSkillsId = [];
-
-        foreach ($listSkills as $listSkill) {
-            $skills = new Skills();
-            $skills->setField($listSkill[0])
-                ->setCaption($listSkill[1]);
-            $manager->persist($skills);
-
-            array_push($listSkillsId, $skills);
-        }
-
-        //Creation des profils
         for ($i = 0; $i < 10; $i++) {
 
-            $profil = new Profil();
+            //Creation des services
 
-            $profil->setFirstname($faker->firstName)
-                ->setLastname($faker->lastName)
-                ->setDatebirth($faker->dateTime)
-                ->setPhone($faker->phoneNumber)
-                ->setEmail($faker->email)
-                ->setStatus($faker->randomElement(['Etudiant', 'Employé']))
-                ->setAddress($faker->address)
-                ->setLinkedin("https://www.linkedin.com/in/" . $profil->getFirstname() . "-" . $profil->getLastname())
-                ->setViadeo('https://viadeo.journaldunet.com/p/' . $profil->getFirstname() . "-" . $profil->getLastname())
-                ->setBiography($faker->realText())
-                ->setIsSearching($faker->boolean())
-                ->setIsExecutive($faker->boolean())
-                ->setIsHandicap($faker->boolean())
-                ->setIsWorkingVisa($faker->boolean())
-                ->setIsWorkingVisaOK($faker->boolean())
-                ->setTJM($faker->numberBetween($min = 8, $max = 12))
-                ->setActualRemuneration($faker->numberBetween($min = 1200, $max = 1600))
-                ->setRemunerationWanted($faker->numberBetween($min = 1700, $max = 2000));
-            $manager->persist($profil);
+            $service = new Service();
 
-            // Creation des formations
-            for ($u = 0; $u < mt_rand(1, 3); $u++) {
-                $formation = new Formation();
+            $service->setNomService($serviceNoms[$i]);
+            $manager->persist($service);
 
-                $formation->setSchool($faker->randomElement(['EPSI', 'Gustave Eiffel', 'EPITECH', 'Lille 1', 'EPITA', 'WIS']))
-                    ->setDiploma($faker->randomElement(['BAC', 'BTS', 'Licence', 'Master']))
-                    ->setFieldStudy($faker->randomElement(['Programmation', 'Reseau', 'digital']))
-                    ->setDateStart($faker->dateTimeBetween('-3 years'))
-                    ->setDateEnd($faker->dateTimeBetween('-6 months'))
-                    ->setDescription($faker->realText())
-                    ->setIdProfil($profil);
+            //Creation des infirmiers
 
-                $manager->persist($formation);
-            }
+            $infirmier = new Infirmier();
 
-            // Creations des skills
-            for ($j = 0; $j < mt_rand(1, 2); $j++) {
+            $infirmier->setNomInfirmier($faker->firstName)
+                ->setPrenomInfirmier($faker->lastName)
+                ->setService($service);
+                // ->setPhone($faker->phoneNumber)
+                // ->setEmail($faker->email)
+                // ->setStatus($faker->randomElement(['Etudiant', 'Employé']))
+                // ->setAddress($faker->address)
+                // ->setLinkedin("https://www.linkedin.com/in/" . $profil->getFirstname() . "-" . $profil->getLastname())
+                // ->setViadeo('https://viadeo.journaldunet.com/p/' . $profil->getFirstname() . "-" . $profil->getLastname())
+                // ->setBiography($faker->realText())
+                // ->setIsSearching($faker->boolean())
+                // ->setIsExecutive($faker->boolean())
+                // ->setIsHandicap($faker->boolean())
+                // ->setIsWorkingVisa($faker->boolean())
+                // ->setIsWorkingVisaOK($faker->boolean())
+                // ->setTJM($faker->numberBetween($min = 8, $max = 12))
+                // ->setActualRemuneration($faker->numberBetween($min = 1200, $max = 1600))
+                // ->setRemunerationWanted($faker->numberBetween($min = 1700, $max = 2000));
+            $manager->persist($infirmier);
 
-                $skillAssignation = new SkillAssignation();
+            // Creation des comptes
+    
+            $compte = new Compte();
 
-                $skillAssignation->setIdProfil($profil)
-                    ->setIdSkillAssignation($listSkillsId[rand(0, 47)])
-                    ->setLevel($faker->numberBetween($min = 0, $max = 5))
-                    ->setNbRecommendation($faker->numberBetween($min = 0, $max = 10));
+            $compte->setUsername($faker->userName)
+                ->setPassword($faker->password)
+                ->setInfirmier($infirmier)
+                ->setRoles($faker->randomElement([['ROLE_USER'],['ROLE_ADMIN']]));
 
-                $manager->persist($skillAssignation);
-            }
+            $manager->persist($compte);
+            
 
-            // Creation des etats de recrutement
-            $recruitment = new Recruitment();
-            $processus = mt_rand(1, 3);
-            $type = ['motivation', 'technique', 'rh'];
-            $contactMethod = ['mail', 'phonecall', 'Linkedin'];
+            // Creations des chambres
+            for ($j = 0; $j < mt_rand(5, 10); $j++) {
+    
+                $chambre = new Chambre();
 
+                $chambre->setService($service);
+                $manager->persist($chambre);
 
-            $recruitment->setIdProfil($profil)
-                ->setContact(true)
-                ->setContactDate($faker->dateTimeBetween('-6 months'))
-                ->setContactMethod($faker->randomElement(['Mail', 'Phone call', 'Linkedin']))
-                ->setContactDescription($faker->realText());
+                $nombreDeLitsEtPatients = mt_rand(1,2);
 
-            if ($processus == 2) {
+                // Creation des patients
+                for ($k = 0; $k < $nombreDeLitsEtPatients; $k++) {
 
-                for ($p = 0; $p <= mt_rand(0, 2); $p++) {
-                    $interview = new Interview();
-                    $interview->setIdRecruitment($recruitment)
-                        ->setInterviewType($type[$p])
-                        ->setDateMeeting($faker->dateTimeBetween('-6 months'))
-                        ->setReview($faker->randomElement(['Tres Négatif', 'Négatif', 'Mitigé', 'Positif', 'Tres Positif']))
-                        ->setDescription($faker->realText());
-                    if ($p < 2) {
-                        $interview->setDateNextInterview($faker->dateTimeBetween('-2 months'));
-                    }
+                    $dateDebut = $faker->dateTime($max = 'now', $timezone = null);
+                    $dateFin = $faker->dateTimeBetween($dateDebut, $interval = '+ 7 days', $timezone = null);
+        
+                    $patient = new Patient();
 
-                    $manager->persist($interview);
-                }
+                    $patient->setNumSecuriteSociale("0123456")
+                        ->setNomPatient($faker->lastName)
+                        ->setPrenomPatient($faker->firstName)
+                        ->setDateArrivee($dateDebut)
+                        ->setDateDepart($dateFin)
+                        ->setAgePatient($faker->numberBetween($min = 2, $max = 100))
+                        ->setAdressePatient($faker->address)
+                        ->setTypePatient('Hospitalisation');
 
+                    $manager->persist($patient);
 
-            } elseif ($processus == 3) {
-                $recruitment
-                    ->setBlockedState(false)
-                    ->setContract(true)
-                    ->setContractDate($faker->dateTimeBetween('-2 months'))
-                    ->setContractDescription($faker->realText());
+                    // Creation des lits
+                    $lit = new Lit();
 
-                for ($p = 0; $p <= 2; $p++) {
-                    $interview = new Interview();
-                    $interview->setIdRecruitment($recruitment)
-                        ->setInterviewType($type[$p])
-                        ->setDateMeeting($faker->dateTimeBetween('-6 months'))
-                        ->setReview($faker->randomElement(['Tres Négatif', 'Négatif', 'Mitigé', 'Positif', 'Tres Positif']))
-                        ->setDescription($faker->realText());
-                    if ($p < 2) {
-                        $interview->setDateNextInterview($faker->dateTimeBetween('-2 months'));
-                    }
-                    $manager->persist($interview);
+                    $lit->setChambre($chambre)
+                        ->setPatient($patient)
+                        ->setDisponibilite(false);
+
+                    $manager->persist($lit);
+                    
                 }
             }
 
-            $manager->persist($recruitment);
+            // Creations des chambres avec les lits sans patients
+            for ($m = 0; $m < 1; $m++) {
+                $chambre = new Chambre();
 
-            $expericence = new Experience();
-            $expericence
-                ->setProfilID($profil)
-                ->setTitle($faker->word)
-                ->setCompany($faker->company)
-                ->setDateStart($faker->dateTime)
-                ->setPlace($faker->city)
-                ->setStrongpoint($faker->word)
-                ->setWeakpoint($faker->word)
-                ->setDescription($faker->realText());
-            $manager->persist($expericence);
+                $chambre->setService($service);
+                $manager->persist($chambre);
 
+                $nombreDeLitsEtPatients = mt_rand(1,2);
 
+                // Creation des lits sans patients
+                for ($l = 0; $l < $nombreDeLitsEtPatients; $l++) {
+            
+                    $lit = new Lit();
+
+                    $lit->setChambre($chambre)
+                        ->setDisponibilite(true);
+
+                    $manager->persist($lit);
+                }
+            }
         }
-
         $manager->flush();
     }
 }
