@@ -20,6 +20,7 @@ class AppFixtures extends Fixture
         $faker = Factory::create('fr_FR');
 
         $serviceNoms = ['Chirurgie', 'Radiologie', 'Neurologie', 'Pneumologie', 'Cardiologie', 'Pédiatrie', 'Urologie', 'Maternité', 'Grands brûlés', 'Hématologie'];
+        $vaccinNoms = ['Pfizer', 'Moderna', 'Astra Zeneca'];
 
         for ($i = 0; $i < 10; $i++) {
 
@@ -39,7 +40,7 @@ class AppFixtures extends Fixture
                 ->setService($service);
             $manager->persist($infirmier);
 
-            // Creation des comptes
+            // Creation des comptes pour les infirmiers
     
             $compte = new Compte();
 
@@ -113,6 +114,62 @@ class AppFixtures extends Fixture
                 }
             }
         }
+
+        for ($i = 0; $i < 10; $i++) {
+
+            if ($i <= 2) {
+                //Creation des secrétaires
+
+                $secretaire = new Secretaire();
+
+                $secretaire->setNomSecretaire($faker->lastName)
+                    ->setPrenomSecretaire($faker->firstName);
+        
+                $manager->persist($secretaire);
+
+                // Creation des comptes pour les secrétaires
+                
+                $compte = new Compte();
+
+                $compte->setUsername($faker->userName)
+                    ->setPassword($faker->password)
+                    ->setSecretaire($secretaire)
+                    ->setRoles($faker->randomElement([['ROLE_USER'],['ROLE_ADMIN']]));
+
+                $manager->persist($compte);
+            }else{
+                //Creation des médecins
+
+                $medecin = new Medecin();
+
+                $medecin->setNomMedecin($faker->lastName)
+                    ->setPrenomMedecin($faker->firstName);
+                    
+                $manager->persist($medecin);
+
+                // Creation des comptes pour les médecins
+                
+                $compte = new Compte();
+
+                $compte->setUsername($faker->userName)
+                    ->setPassword($faker->password)
+                    ->setMedecin($medecin)
+                    ->setRoles($faker->randomElement([['ROLE_USER'],['ROLE_ADMIN']]));
+
+                $manager->persist($compte);
+            }
+            
+        }
+
+        for ($i = 0; $i < 3; $i++) {
+            //Creation des vaccins
+
+            $vaccin = new Vaccin();
+
+            $vaccin->setTypeVaccin($vaccinNoms[$i])
+                    ->setReserve($faker->numberBetween($min = 10, $max=200));
+        }
+        
         $manager->flush();
     }
 }

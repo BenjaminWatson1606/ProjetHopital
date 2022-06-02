@@ -30,7 +30,7 @@ class Patient
     private $id;
 
      /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="string")
      * @Groups({"patient_read"})
      */
     private $NumSecuriteSociale;
@@ -93,12 +93,12 @@ class Patient
         return $this->id;
     }
 
-    public function getNumSecuriteSociale(): ?int
+    public function getNumSecuriteSociale(): ?string
     {
         return $this->NumSecuriteSociale;
     }
 
-    public function setNumSecuriteSociale(int $NumSecuriteSociale): self
+    public function setNumSecuriteSociale(string $NumSecuriteSociale): self
     {
         $this->NumSecuriteSociale = $NumSecuriteSociale;
 

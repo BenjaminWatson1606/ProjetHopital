@@ -383,7 +383,7 @@ import {
                     <Select
                       options={options}
                       onChange={setSelectedOption}
-                      name="AbsenceType"
+                      name="PatientType"
                       defaultValue={selectedOption}
                       value={selectedOption}
                       theme={(theme) => ({

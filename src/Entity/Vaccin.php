@@ -34,7 +34,7 @@ class Vaccin
     private $TypeVaccin;
 
     /**
-     * @ORM\Column(type="boolean")
+     * @ORM\Column(type="integer")
      * @Groups({"vaccin_read"})
      */
     private $Reserve;
@@ -61,12 +61,12 @@ class Vaccin
         return $this;
     }
 
-    public function getReserve(): ?bool
+    public function getReserve(): ?int
     {
         return $this->Reserve;
     }
 
-    public function setReserve(bool $Reserve): self
+    public function setReserve(int $Reserve): self
     {
         $this->Reserve = $Reserve;
 
