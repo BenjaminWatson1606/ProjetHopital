@@ -26,19 +26,19 @@ class Infirmier
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
-     * @Groups({"infirmier_read", "compte_read"})
+     * @Groups({"infirmier_read", "compte_read", "service_read"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=200)
-     * @Groups({"infirmier_read", "compte_read"})
+     * @Groups({"infirmier_read", "compte_read", "service_read"})
      */
     private $NomInfirmier;
 
     /**
      * @ORM\Column(type="string", length=200)
-     * @Groups({"infirmier_read", "compte_read"})
+     * @Groups({"infirmier_read", "compte_read", "service_read"})
      */
     private $PrenomInfirmier;
 
