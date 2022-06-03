@@ -37,24 +37,24 @@ class Patient
 
     /**
      * @ORM\Column(type="string", length=200)
-     * @Groups({"patient_read", "lit_read"})
+     * @Groups({"patient_read", "lit_read", "vaccination_read"})
      */
     private $NomPatient;
 
     /**
      * @ORM\Column(type="string", length=200)
-     * @Groups({"patient_read", "lit_read"})
+     * @Groups({"patient_read", "lit_read","vaccination_read"})
      */
     private $PrenomPatient;
 
     /**
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(type="datetime",nullable=true)
      * @Groups({"patient_read"})
      */
     private $DateArrivee;
 
     /**
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(type="datetime",nullable=true)
      * @Groups({"patient_read"})
      */
     private $DateDepart;

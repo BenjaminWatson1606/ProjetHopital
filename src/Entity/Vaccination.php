@@ -8,6 +8,8 @@ use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
 use Symfony\Component\Serializer\Annotation\Groups;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 
 /**
  * @ORM\Entity(repositoryClass=VaccinationRepository::class)
@@ -28,36 +30,45 @@ class Vaccination
     private $id;
 
     /**
-     * @ORM\Column(type="date")
+     * @ORM\Column(type="datetime")
      * @Groups({"vaccination_read"})
      */
     private $DateDebut;
 
     /**
-     * @ORM\Column(type="date")
+     * @ORM\Column(type="datetime")
      * @Groups({"vaccination_read"})
      */
     private $DateFin;
 
     /**
-     * @ORM\OneToOne(targetEntity=Vaccin::class, inversedBy="Vaccination")
+     * @ORM\ManyToOne(targetEntity=Vaccin::class, inversedBy="Vaccinations")
+     * @Groups({"vaccination_read"})
      */
     private $Vaccin;
 
     /**
      * @ORM\OneToOne(targetEntity=Secretaire::class, inversedBy="Vaccination")
+     * @Groups({"vaccination_read"})
      */
     private $Secretaire;
 
     /**
-     * @ORM\OneToOne(targetEntity=Medecin::class, inversedBy="Vaccination")
+     * @ORM\ManyToOne(targetEntity=Medecin::class, inversedBy="Vaccinations")
+     * @Groups({"vaccination_read"})
      */
     private $Medecin;
 
     /**
      * @ORM\OneToOne(targetEntity=Patient::class, inversedBy="Vaccination")
+     * @Groups({"vaccination_read"})
      */
     private $Patient;
+
+    public function __construct()
+    {
+        $this->Vaccins = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -93,7 +104,7 @@ class Vaccination
         return $this->Vaccin;
     }
 
-    public function setVaccin(Vaccin $Vaccin): self
+    public function setVaccin(?Vaccin $Vaccin): self
     {
         $this->Vaccin = $Vaccin;
 
@@ -105,7 +116,7 @@ class Vaccination
         return $this->Secretaire;
     }
 
-    public function setSecretaire(Secretaire $Secretaire): self
+    public function setSecretaire(?Secretaire $Secretaire): self
     {
         $this->Secretaire = $Secretaire;
 
@@ -117,7 +128,7 @@ class Vaccination
         return $this->Medecin;
     }
 
-    public function setMedecin(Medecin $Medecin): self
+    public function setMedecin(?Medecin $Medecin): self
     {
         $this->Medecin = $Medecin;
 

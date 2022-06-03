@@ -29,7 +29,7 @@ class Vaccin
 
     /**
      * @ORM\Column(type="string")
-     * @Groups({"vaccin_read"})
+     * @Groups({"vaccin_read","vaccination_read"})
      */
     private $TypeVaccin;
 
@@ -40,9 +40,9 @@ class Vaccin
     private $Reserve;
 
     /**
-     * @ORM\OneToOne(targetEntity=Vaccination::class, mappedBy="Vaccin")
+     * @ORM\OneToMany(targetEntity=Vaccination::class, mappedBy="Vaccin")
      */
-    private $Vaccination;
+    private $Vaccinations;
 
     public function getId(): ?int
     {
@@ -73,15 +73,29 @@ class Vaccin
         return $this;
     }
 
-    public function getVaccination(): ?Vaccination
+    public function getVaccination(): ?Collection
     {
-        return $this->Vaccination;
+        return $this->Vaccinations;
     }
 
-    public function setVaccination(Vaccination $Vaccination): self
+    public function addVaccin(Vaccination $Vaccination): self
     {
-        $this->Vaccination = $Vaccination;
+        if (!$this->Vaccinations->contains($Vaccination)) {
+            $this->Vaccinations[] = $Vaccination;
+            $Vaccination->setVaccin($this);
+        }
 
+        return $this;
+    }
+
+    public function removeVaccin(Vaccination $Vaccination): self
+    {
+        if ($this->Vaccinations->removeElement($Vaccination)){
+            if ($Vaccination->getVaccin() === $this) {
+                $Vaccination->setVaccin(null);
+            }
+        }
+        
         return $this;
     }
 }

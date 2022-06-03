@@ -8,6 +8,8 @@ use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
 use Symfony\Component\Serializer\Annotation\Groups;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 
 /**
  * @ORM\Entity(repositoryClass=MedecinRepository::class)
@@ -29,26 +31,31 @@ class Medecin
 
     /**
      * @ORM\Column(type="string", length=200)
-     * @Groups({"medecin_read"})
+     * @Groups({"medecin_read", "vaccination_read"})
      */
     private $NomMedecin;
 
     /**
      * @ORM\Column(type="string", length=200)
-     * @Groups({"medecin_read"})
+     * @Groups({"medecin_read","vaccination_read"})
      */
     private $PrenomMedecin;
 
     /**
-     * @ORM\OneToOne(targetEntity=Vaccination::class, mappedBy="Medecin")
+     * @ORM\OneToMany(targetEntity=Vaccination::class, mappedBy="Medecin")
      * @Groups({"medecin_read"})
      */
-    private $Vaccination;
+    private $Vaccinations;
 
     /**
      * @ORM\OneToOne(targetEntity=Compte::class, mappedBy="Medecin")
      */
     private $Compte;
+
+    public function __construct()
+    {
+        $this->Vaccinations = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -91,15 +98,29 @@ class Medecin
         return $this;
     }
 
-    public function getVaccination(): ?Vaccination
+    public function getVaccinations(): ?Collection
     {
-        return $this->Vaccination;
+        return $this->Vaccinations;
     }
 
-    public function setVaccination(Vaccination $Vaccination): self
+    public function addVaccination(Vaccination $Vaccination): self
     {
-        $this->Vaccination = $Vaccination;
+        if (!$this->Vaccinations->contains($Vaccination)) {
+            $this->Vaccinations[] = $Vaccination;
+            $Vaccination->setMedecin($this);
+        }
 
         return $this;
     }
+
+    public function removeVaccination(Vaccination $Vaccination): self
+    {
+        if ($this->Vaccinations->removeElement($Vaccination)){
+            if ($Vaccination->getMedecin() === $this) {
+                $Vaccination->setMedecin(null);
+            }
+        }
+        return $this;
+    }
+   
 }
