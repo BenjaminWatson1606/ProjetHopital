@@ -224,7 +224,7 @@ import {
                     <td>{service.NomService}</td>
                     <td>{litsDispo[service.id]}</td>
                     {service.Infirmiers &&
-                    <td>{service.Infirmiers.map(infirmier =>( infirmier.slice(16) + " "))}</td>
+                    <td>{service.Infirmiers.map(infirmier =>( infirmier.NomInfirmier + " " + infirmier.PrenomInfirmier))}</td>
                     }
                     {!service.Infirmiers &&
                     <td>/</td>

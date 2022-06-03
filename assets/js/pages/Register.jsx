@@ -64,6 +64,7 @@ export default function Register() {
           roles: ['ROLE_USER']
         });
         toast.success(t("addedUser"))
+        history.replace("/#/login");
       } catch (error) {
         if (error.response) {
           // Request made and server responded
