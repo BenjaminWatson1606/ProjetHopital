@@ -8,6 +8,8 @@ use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
 use Symfony\Component\Serializer\Annotation\Groups;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 
 /**
  * @ORM\Entity(repositoryClass=VaccinRepository::class)
@@ -43,6 +45,11 @@ class Vaccin
      * @ORM\OneToMany(targetEntity=Vaccination::class, mappedBy="Vaccin")
      */
     private $Vaccinations;
+
+    public function __construct()
+    {
+        $this->Vaccinations = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
