@@ -65,10 +65,6 @@ class Vaccination
      */
     private $Patient;
 
-    public function __construct()
-    {
-        $this->Vaccins = new ArrayCollection();
-    }
 
     public function getId(): ?int
     {
